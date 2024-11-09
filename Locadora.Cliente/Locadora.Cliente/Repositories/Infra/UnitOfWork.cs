@@ -1,21 +1,24 @@
+using Locadora.Cliente.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Locadora.Cliente.Repositories.Infra;
 
+#region Interface
 public interface IUnitOfWork : IDisposable
 {
 	Task IniciarTransacaoAsync();
 	Task PersistirTransacaoAsync();
 	Task ReverterTransacaoAsync();
 }
+#endregion
 
 public class UnitOfWork : IUnitOfWork
 {
-	private readonly DbContext _context;
+	private readonly ClienteDbContext _context;
 	private IDbContextTransaction? _transacao;
 
-	public UnitOfWork(DbContext context)
+	public UnitOfWork(ClienteDbContext context)
 	{
 		_context = context ?? throw new ArgumentNullException(nameof(context));
 	}
@@ -24,7 +27,7 @@ public class UnitOfWork : IUnitOfWork
 	{
 		if (_transacao != null)
 		{
-			throw new InvalidOperationException("Uma transaÁ„o j· est· em andamento.");
+			throw new InvalidOperationException("Uma transa√ß√£o j√° est√° em andamento.");
 		}
 
 		_transacao = await _context.Database.BeginTransactionAsync();
@@ -34,7 +37,7 @@ public class UnitOfWork : IUnitOfWork
 	{
 		if (_transacao == null)
 		{
-			throw new InvalidOperationException("Nenhuma transaÁ„o foi iniciada.");
+			throw new InvalidOperationException("Nenhuma transa√ß√£o foi iniciada.");
 		}
 
 		try

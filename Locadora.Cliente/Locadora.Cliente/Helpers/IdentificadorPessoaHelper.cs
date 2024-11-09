@@ -57,9 +57,12 @@ namespace Locadora.Cliente.Helpers
             if (string.IsNullOrWhiteSpace(telefone))
                 return false;
 
-            telefone = Regex.Replace(telefone, @"[^\d]", "");
+            if (telefone == "9999999999")
+                return false;
 
-            return telefone.Length == 10 || telefone.Length == 11;
+            telefone = MeuRegex().Replace(telefone, "");
+
+            return telefone.Length is 10 or 11;
         }
         #endregion
 

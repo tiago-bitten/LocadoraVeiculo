@@ -30,6 +30,9 @@ public class ClienteAppException : Exception
             ETipoException.EmailInvalido => "O E-mail informado é inválido.",
             ETipoException.DataNascimentoInvalida => "Ninguém nascido nessa data está vivo ta de sacanagem.",
             ETipoException.TelefoneInvalido => "O telefone informado é inválido.",
+            ETipoException.ClienteComEmailJaExiste => "Já existe um cliente com esse e-mail registrado.",
+            ETipoException.ClienteComCpfJaExiste => "Já existe um cliente com esse cpf registrado.",
+            ETipoException.IdadeMinimaDeCadastro => "O cliente precisa ser maior de idade.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -40,5 +43,8 @@ public enum ETipoException
     CpfInvalido = 1,
     EmailInvalido = 2,
     DataNascimentoInvalida = 3,
-    TelefoneInvalido = 4
+    TelefoneInvalido = 4,
+    ClienteComEmailJaExiste = 5,
+    ClienteComCpfJaExiste = 6,
+    IdadeMinimaDeCadastro = 7
 }

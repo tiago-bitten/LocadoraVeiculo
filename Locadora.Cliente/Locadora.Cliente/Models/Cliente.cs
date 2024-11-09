@@ -40,5 +40,30 @@ public sealed class Cliente : EntidadeBase
         if (telefoneInvalido)
             throw new ClienteAppException(ETipoException.TelefoneInvalido);
     }
+
+    public void ValidarIdadeMinima()
+    {
+        const int idadeMinima = 18;
+        if (Idade < idadeMinima)
+            throw new ClienteAppException(ETipoException.IdadeMinimaDeCadastro);
+    }
+    #endregion
+    
+    #region RecuperarIdade
+    public int Idade 
+    {
+        get 
+        {
+            var hoje = DateTime.Today;
+            var idade = hoje.Year - DataNascimento.Year;
+
+            if (DataNascimento.Date > hoje.AddYears(-idade)) 
+            {
+                idade--;
+            }
+
+            return idade;
+        }
+    }
     #endregion
 }
