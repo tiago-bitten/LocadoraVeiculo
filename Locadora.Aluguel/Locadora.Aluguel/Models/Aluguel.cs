@@ -4,8 +4,8 @@ namespace Locadora.Aluguel.Models;
 
 public sealed class Aluguel : EntidadeBase
 {
-    public Guid CodigoCliente { get; set; }
-    public Guid CodigoVeiculo { get; set; }
+    public string CodigoCliente { get; set; }
+    public string CodigoVeiculo { get; set; }
     public DateTime DataInicio { get; set; }
     public DateTime DataFinal { get; set; }
     public EStatusAluguel Status { get; private set; } = EStatusAluguel.EmAndamento;

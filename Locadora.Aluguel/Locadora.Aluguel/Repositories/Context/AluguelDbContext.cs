@@ -14,6 +14,12 @@ public class AluguelDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Models.Aluguel>(entity => entity.HasKey(x => x.Id));
+        modelBuilder.Entity<Models.Aluguel>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Status)
+                .HasConversion<string>();
+        });
     }
 }
