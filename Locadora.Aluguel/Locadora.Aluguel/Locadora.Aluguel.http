@@ -1,0 +1,6 @@
+@Locadora.Aluguel_HostAddress = http://localhost:5094
+
+GET {{Locadora.Aluguel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
