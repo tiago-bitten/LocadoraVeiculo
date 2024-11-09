@@ -1,4 +1,5 @@
-namespace Locadora.Veiculo.Extensions;
+﻿namespace Locadora.Cliente.Extensions;
+
 
 public static class IdentificadorExtensions
 {

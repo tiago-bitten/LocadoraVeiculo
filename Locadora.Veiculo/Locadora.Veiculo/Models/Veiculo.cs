@@ -68,12 +68,12 @@ public class Veiculo : EntidadeBase
     #endregion
     
     #region Status
+    public void Disponibilizar() => Status = EStatusVeiculo.Disponivel;
     public void Alugar() => Status = EStatusVeiculo.Alugado;
     public void EmManutencao() => Status = EStatusVeiculo.EmManutencao;
     public void Reservar() => Status = EStatusVeiculo.Reservado;
     public void Vender() => Status = EStatusVeiculo.Vendido;
     #endregion
-
     #endregion
 }
 

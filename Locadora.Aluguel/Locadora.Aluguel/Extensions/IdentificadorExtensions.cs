@@ -1,22 +1,30 @@
 ﻿namespace Locadora.Aluguel.Extensions;
 
+
 public static class IdentificadorExtensions
 {
+    #region ValidarClienteId
     public static void ValidarClienteId(this Guid id)
     {
         ValidarIdComPalavra(id, "Cliente");
     }
+    #endregion
 
+    #region ValidarAluguelId
     public static void ValidarAluguelId(this Guid id)
     {
         ValidarIdComPalavra(id, "Aluguel");
     }
+    #endregion
 
+    #region ValidarVeiculoId
     public static void ValidarVeiculoId(this Guid id)
     {
         ValidarIdComPalavra(id, "Veiculo");
     }
+    #endregion
 
+    #region ValidarIdComPalavra
     private static void ValidarIdComPalavra(Guid id, string palavraEsperada)
     {
         var idString = id.ToString();
@@ -24,7 +32,8 @@ public static class IdentificadorExtensions
 
         if (!palavraNoId.Equals(palavraEsperada.PadRight(8, '0'), StringComparison.OrdinalIgnoreCase))
         {
-            throw new ArgumentException($"O ID não é válido para {palavraEsperada}. ID esperado no formato: XXXXXXXX-{palavraEsperada.PadRight(8, '0')}-XXXXXXXXXXXX");
+            throw new ArgumentException($"O ID n�o � v�lido para {palavraEsperada}. ID esperado no formato: XXXXXXXX-{palavraEsperada.PadRight(8, '0')}-XXXXXXXXXXXX");
         }
     }
+    #endregion
 }

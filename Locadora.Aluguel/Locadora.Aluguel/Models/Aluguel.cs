@@ -18,9 +18,12 @@ public sealed class Aluguel : EntidadeBase
             throw new AluguelAppException(ETipoException.DataInicialMaiorQueDataFinal);
     }
     
-    public void Concluir() => Status = EStatusAluguel.Concluido;
+    #region Status
     public void Programar() => Status = EStatusAluguel.Programdo;
+    public void EmAndamento() => Status = EStatusAluguel.EmAndamento;
+    public void Concluir() => Status = EStatusAluguel.Concluido;
     public void Cancelar() => Status = EStatusAluguel.Cancelado;
+    #endregion
     #endregion
 }
 
