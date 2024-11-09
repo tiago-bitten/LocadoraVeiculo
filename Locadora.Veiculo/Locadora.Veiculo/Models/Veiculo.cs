@@ -8,23 +8,28 @@ public class Veiculo : EntidadeBase
     public EModeloVeiculo Modelo { get; set; }
     public ETipoVeiculo Tipo { get; set; }
     public DateTime DataFabricacao { get; }
-    public int AnoFabricacao => DataFabricacao.Date.Year;
     public string Placa { get; set; }
-    public EStatusVeiculo Status { get; set; } = EStatusVeiculo.Disponivel;
+    public EStatusVeiculo Status { get; private set; } = EStatusVeiculo.Disponivel;
     public decimal ValorDiaria { get; set; }
+    
+    public int AnoFabricacao => DataFabricacao.Date.Year;
     
     //
 
     public List<Manutencao> Manutencoes { get; set; } = [];
     
     #region Regras
+    
+    #region ValidarDataFabricacao
     public void ValidarDataFabricao()
     {
         var dataLimite = new DateTime(1900, 1, 1);
         if (DataFabricacao < dataLimite)
             throw new VeiculoAppException(ETipoException.DataFabricacaoInvalida);
     }
+    #endregion
     
+    #region ValidarCompatibilidadeTipoModelo
     public void ValidarCompatibilidadeTipoModelo()
     {
         var modelosPermitidosPorTipo = new Dictionary<ETipoVeiculo, List<EModeloVeiculo>>
@@ -60,6 +65,15 @@ public class Veiculo : EntidadeBase
             throw new VeiculoAppException(ETipoException.TipoModeloIncompativel);
         }
     }
+    #endregion
+    
+    #region Status
+    public void Alugar() => Status = EStatusVeiculo.Alugado;
+    public void EmManutencao() => Status = EStatusVeiculo.EmManutencao;
+    public void Reservar() => Status = EStatusVeiculo.Reservado;
+    public void Vender() => Status = EStatusVeiculo.Vendido;
+    #endregion
+
     #endregion
 }
 
