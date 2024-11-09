@@ -57,7 +57,7 @@ public class ClientesController : ControllerClienteBase
     #region ObterTodos
     [HttpGet]
     [HttpGet("ObterTodos")]
-    public async Task<IActionResult> ObterTodos([FromQuery] QueryFiltro<Models.Cliente> filtro)
+    public async Task<IActionResult> ObterTodos([FromQuery] QueryFiltro filtro)
     {
         try
         {

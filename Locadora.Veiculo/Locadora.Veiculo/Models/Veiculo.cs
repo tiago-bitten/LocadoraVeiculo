@@ -1,4 +1,5 @@
 ﻿using Locadora.Veiculo.Enterprise;
+using Locadora.Veiculo.Helpers;
 
 namespace Locadora.Veiculo.Models;
 
@@ -7,7 +8,7 @@ public class Veiculo : EntidadeBase
     public string Marca { get; set; }
     public EModeloVeiculo Modelo { get; set; }
     public ETipoVeiculo Tipo { get; set; }
-    public DateTime DataFabricacao { get; }
+    public DateTime DataFabricacao { get; set; }
     public string Placa { get; set; }
     public EStatusVeiculo Status { get; private set; } = EStatusVeiculo.Disponivel;
     public decimal ValorDiaria { get; set; }
@@ -26,6 +27,15 @@ public class Veiculo : EntidadeBase
         var dataLimite = new DateTime(1900, 1, 1);
         if (DataFabricacao < dataLimite)
             throw new VeiculoAppException(ETipoException.DataFabricacaoInvalida);
+    }
+    #endregion
+
+    #region ValidarPlaca
+    public void ValidarPlaca()
+    {
+        var placaInvalida = !PlacaHelper.ValidarPlaca(Placa);
+        if (placaInvalida)
+            throw new VeiculoAppException(ETipoException.PlacaInvalida);
     }
     #endregion
     

@@ -2,21 +2,18 @@
 
 public class Identificador
 {
-    public Guid Id { get; set; } = GerarId();
+    public string Id { get; private set; } = GerarId();
 
     #region GerarId
-    private static Guid GerarId()
+    private static string GerarId()
     {
-        var guid = Guid.NewGuid().ToString();
-        var palavra = "Veiculo";
+        const string palavra = "veiculo";
 
-        var textoFormatado = palavra.Length > 8
-            ? palavra[..8]
-            : palavra.PadRight(8, '0');
+        var random = new Random();
+        var numeroAleatorio = random.Next(10000000, 99999999);
 
-        var guidPersonalizado = $"{guid[..8]}-{textoFormatado}-{guid[13..]}";
-
-        return Guid.Parse(guidPersonalizado);
+        var idFormatado = $"{palavra}{numeroAleatorio}";
+        return idFormatado;
     }
     #endregion
 }

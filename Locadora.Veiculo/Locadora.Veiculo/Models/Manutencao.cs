@@ -4,6 +4,7 @@ namespace Locadora.Veiculo.Models;
 
 public class Manutencao : EntidadeBase
 {
+    public string CodigoVeiculo { get; set; }
     public ETipoManutencao Tipo { get; set; }
     public DateTime DataInicio { get; set; }
     public DateTime? DataFinal { get; set; }
@@ -26,9 +27,12 @@ public class Manutencao : EntidadeBase
             throw new VeiculoAppException(ETipoException.ManutencaoConcluidaSemDataFinal);
     }
 
+    #region Status
+    public void Programar() => Status = EStatusManutencao.Programada;
     public void EmAndamento() => Status = EStatusManutencao.EmAndamento;
     public void Concluir() => Status = EStatusManutencao.Concluida;
     public void Cancelar() => Status = EStatusManutencao.Cancelada;
+    #endregion
     #endregion
 }
 
@@ -41,9 +45,10 @@ public enum ETipoManutencao
 
 public enum EStatusManutencao
 {
-    Pendente = 1,
-    EmAndamento = 2,
-    Concluida = 3,
-    Cancelada = 4
+    Programada = 1,
+    Pendente = 2,
+    EmAndamento = 3,
+    Concluida = 5,
+    Cancelada = 6
 }
 #endregion

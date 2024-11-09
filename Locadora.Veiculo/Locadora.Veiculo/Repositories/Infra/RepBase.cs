@@ -1,70 +1,91 @@
-using Locadora.Veiculo.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Locadora.Veiculo.Models;
+using Locadora.Veiculo.Repositories.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Veiculo.Repositories.Infra;
 
+#region Interface
 public interface IRepBase<T> where T : EntidadeBase
 {
     Task AdicionarAsync(T entidade);
-
-    Task<T?> ObterPorIdAsync(Guid id);
-
-    IQueryable<T> ObterTodos();
-
+    Task<T?> ObterPorIdAsync(string id, params string[]? includes);
+    IQueryable<T> ObterTodos(params string[]? includes);
     void Atualizar(T entidade);
-
     void Remover(T entidade);
-
+    Task<T?> BuscarAsync(Expression<Func<T, bool>> filtro, params string[]? includes);
     Task<bool> ExisteAsync(Expression<Func<T, bool>> filtro);
-
     Task<int> ContarAsync(Expression<Func<T, bool>> filtro);
 }
+#endregion
 
 public class RepBase<T> : IRepBase<T> where T : EntidadeBase
 {
-    protected readonly DbContext Context;
+    #region Ctor
+    protected readonly VeiculoDbContext Context;
     protected readonly DbSet<T> DbSet;
 
-    public RepBase(DbContext context)
+    public RepBase(VeiculoDbContext context)
     {
         Context = context;
         DbSet = context.Set<T>();
     }
+    #endregion
 
+    #region AdicionarAsync
     public async Task AdicionarAsync(T entidade)
     {
         await DbSet.AddAsync(entidade);
     }
+    #endregion
 
-    public async Task<T?> ObterPorIdAsync(Guid id)
+    #region ObterPorIdAsync
+    public async Task<T?> ObterPorIdAsync(string id, params string[]? includes)
     {
         return await DbSet.FindAsync(id);
     }
+    #endregion
 
-    public IQueryable<T> ObterTodos()
+    #region ObterTodos
+    public IQueryable<T> ObterTodos(params string[]? includes)
     {
         return DbSet.AsQueryable();
     }
+    #endregion
 
+    #region Atualizar
     public void Atualizar(T entidade)
     {
         entidade.Atualizar();
         DbSet.Update(entidade);
     }
+    #endregion
 
+    #region Remover
     public void Remover(T entidade)
     {
         DbSet.Remove(entidade);
     }
+    #endregion
 
-    public async Task<bool> ExisteAsync(Expression<Func<T, bool>> filtro)
+    #region BuscarAsync
+    public async Task<T?> BuscarAsync(Expression<Func<T, bool>> filtro, params string[]? includes)
     {
-        return await DbSet.AnyAsync(filtro);
+        return await DbSet.FirstOrDefaultAsync(filtro);
     }
+    #endregion
 
-    public async Task<int> ContarAsync(Expression<Func<T, bool>> filtro)
+    #region ExisteAsync
+    public Task<bool> ExisteAsync(Expression<Func<T, bool>> filtro)
     {
-        return await DbSet.CountAsync(filtro);
+        return DbSet.AnyAsync(filtro);
     }
+    #endregion
+
+    #region ContarAsync
+    public Task<int> ContarAsync(Expression<Func<T, bool>> filtro)
+    {
+        return DbSet.CountAsync(filtro);
+    }
+    #endregion
 }

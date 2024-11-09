@@ -1,4 +1,4 @@
-﻿namespace Locadora.Cliente.Enterprise;
+﻿namespace Locadora.Veiculo.Enterprise;
 
 public class QueryFiltro
 {

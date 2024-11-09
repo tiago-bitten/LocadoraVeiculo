@@ -1,3 +1,4 @@
+using Locadora.Veiculo.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -12,10 +13,10 @@ public interface IUnitOfWork : IDisposable
 
 public class UnitOfWork : IUnitOfWork
 {
-	private readonly DbContext _context;
+	private readonly VeiculoDbContext _context;
 	private IDbContextTransaction? _transacao;
 
-	public UnitOfWork(DbContext context)
+	public UnitOfWork(VeiculoDbContext context)
 	{
 		_context = context ?? throw new ArgumentNullException(nameof(context));
 	}
@@ -24,7 +25,7 @@ public class UnitOfWork : IUnitOfWork
 	{
 		if (_transacao != null)
 		{
-			throw new InvalidOperationException("Uma transação já está em andamento.");
+			throw new InvalidOperationException("Uma transaï¿½ï¿½o jï¿½ estï¿½ em andamento.");
 		}
 
 		_transacao = await _context.Database.BeginTransactionAsync();
@@ -34,7 +35,7 @@ public class UnitOfWork : IUnitOfWork
 	{
 		if (_transacao == null)
 		{
-			throw new InvalidOperationException("Nenhuma transação foi iniciada.");
+			throw new InvalidOperationException("Nenhuma transaï¿½ï¿½o foi iniciada.");
 		}
 
 		try

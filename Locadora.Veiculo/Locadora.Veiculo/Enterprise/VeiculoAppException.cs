@@ -35,6 +35,8 @@ public class VeiculoAppException : Exception
             ETipoException.ManutencaoConcluidaSemDataFinal => "Para concluir uma manutenção, é necessário informar a data final.",
             ETipoException.DataFabricacaoInvalida => "A data de fabricação informada é inválida.",
             ETipoException.TipoModeloIncompativel => "O tipo de veiculo escolhido não é compativel ao modelo selecionado.",
+            ETipoException.VeiculoComPlacaJaExiste => "Já existe um veiculo com a placa informada.",
+            ETipoException.PlacaInvalida => "A placa informada é inválida.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -47,5 +49,7 @@ public enum ETipoException
     DataInicialMaiorQueFinal = 3,
     ManutencaoConcluidaSemDataFinal = 4,
     DataFabricacaoInvalida = 5,
-    TipoModeloIncompativel = 6
+    TipoModeloIncompativel = 6,
+    VeiculoComPlacaJaExiste = 7,
+    PlacaInvalida = 8
 }

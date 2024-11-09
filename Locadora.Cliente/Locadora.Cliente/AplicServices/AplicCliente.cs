@@ -14,7 +14,7 @@ public interface IAplicCliente
 {
     Task<ResultadoClienteDto> AdicionarAsync(AdicionarClienteDto dto);
     Task<ResultadoClienteDto?> ObterPorIdAsync(string id);
-    Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro<Models.Cliente>? filtro);
+    Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro? filtro);
 }
 #endregion
 
@@ -62,14 +62,11 @@ public class AplicCliente : AplicBase<Models.Cliente, IServCliente>, IAplicClien
     #endregion
     
     #region ObterTodosAsync
-    public async Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro<Models.Cliente>? filtro)
+    public async Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro? filtro)
     {
         var query = Service.ObterTodos();
         var total = await query.CountAsync();
         
-        if (filtro?.OrderBy != null)
-            query = filtro.OrderByDescending ? query.OrderByDescending(filtro.OrderBy) : query.OrderBy(filtro.OrderBy);
-
         if (filtro?.Skip.HasValue == true)
             query = query.Skip(filtro.Skip.Value);
 
