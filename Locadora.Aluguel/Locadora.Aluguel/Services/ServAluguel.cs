@@ -7,7 +7,7 @@ namespace Locadora.Aluguel.Services;
 #region Interface
 public interface IServAluguel : IServBase<Models.Aluguel>
 {
-    Task ValidarDisponibilidade(Models.Aluguel aluguel, string codigoVeiculo, string codigoCliente);
+    Task ValidarDisponibilidadeAsync(Models.Aluguel aluguel);
 }
 #endregion
 
@@ -18,15 +18,28 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     {
     }
     #endregion
-
-    public async Task ValidarDisponibilidade(Models.Aluguel aluguel, string codigoVeiculo, string codigoCliente)
+    
+    #region AdicionarAsync
+    public override async Task AdicionarAsync(Models.Aluguel aluguel)
     {
-        var clienteEstaComAluguelEmAndamento = await Repository.ClienteEstaComAluguelEmAndamentoAsync(codigoCliente);
+        aluguel.ValidarValorTotal();
+        await ValidarDisponibilidadeAsync(aluguel);
+
+        await base.AdicionarAsync(aluguel);
+    }
+
+    #endregion
+
+    #region ValidarDisponibilidadeAsync
+    public async Task ValidarDisponibilidadeAsync(Models.Aluguel aluguel)
+    {
+        var clienteEstaComAluguelEmAndamento = await Repository.ClienteEstaComAluguelEmAndamentoAsync(aluguel.CodigoCliente);
         if (clienteEstaComAluguelEmAndamento)
             throw new AluguelAppException(ETipoException.ClienteEstaComAluguelEmAndamento);
         
-        var veiculoEstaComAluguelEmAndamento = await Repository.VeiculoEstaComAluguelEmAndamentoAsync(codigoVeiculo);
+        var veiculoEstaComAluguelEmAndamento = await Repository.VeiculoEstaComAluguelEmAndamentoAsync(aluguel.CodigoVeiculo);
         if (veiculoEstaComAluguelEmAndamento)
             throw new AluguelAppException(ETipoException.VeiculoEstaComAluguelEmAndamento);
     }
+    #endregion
 }

@@ -28,7 +28,13 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
     public async Task<RespostaAluguelDto> AdicionarAsync(AdicionarAluguelDto dto)
     {
         var aluguel = Mapper.Map<Models.Aluguel>(dto);
+        
+        aluguel.ValidarDatas();
 
+        await Uow.IniciarTransacaoAsync();
+        await Service.AdicionarAsync(aluguel);
+        await Uow.PersistirTransacaoAsync();
+        
         var resposta = Mapper.Map<RespostaAluguelDto>(aluguel);
 
         return resposta;
