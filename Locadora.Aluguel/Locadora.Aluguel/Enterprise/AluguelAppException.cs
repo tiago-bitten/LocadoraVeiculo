@@ -27,6 +27,8 @@ public class AluguelAppException : Exception
         return exceptionType switch
         {
             ETipoException.DataInicialMaiorQueDataFinal => "A data inicial não pode ser maior que a data final.",
+            ETipoException.ClienteEstaComAluguelEmAndamento => "O cliente está com um aluguel em andamento.",
+            ETipoException.VeiculoEstaComAluguelEmAndamento => "O veículo está com um aluguel em andamento.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -34,5 +36,7 @@ public class AluguelAppException : Exception
 
 public enum ETipoException
 {
-    DataInicialMaiorQueDataFinal = 1
+    DataInicialMaiorQueDataFinal = 1,
+    ClienteEstaComAluguelEmAndamento = 2,
+    VeiculoEstaComAluguelEmAndamento = 3
 }

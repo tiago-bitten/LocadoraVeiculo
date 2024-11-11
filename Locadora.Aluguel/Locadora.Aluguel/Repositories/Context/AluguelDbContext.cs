@@ -20,6 +20,9 @@ public class AluguelDbContext : DbContext
 
             entity.Property(x => x.Status)
                 .HasConversion<string>();
+
+            entity.HasIndex(x => x.CodigoCliente);
+            entity.HasIndex(x => x.CodigoVeiculo);
         });
     }
 }
