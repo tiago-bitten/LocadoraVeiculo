@@ -2,7 +2,7 @@
 
 public class EntidadeBase : Identificador
 {
-    public DateTime DataCriacao { get; } = DateTime.Now;
+    public DateTime DataCriacao { get; private set; } = DateTime.Now;
     public DateTime DataAlteracao { get; private set; } = DateTime.Now;
     public bool Inativo { get; private set; } = false;
     

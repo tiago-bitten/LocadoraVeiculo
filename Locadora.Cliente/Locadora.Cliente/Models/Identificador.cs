@@ -7,7 +7,7 @@ public class Identificador
     #region GerarId
     private static string GerarId()
     {
-        const string palavra = "cliente";
+        const string palavra = "cliente_";
 
         var random = new Random();
         var numeroAleatorio = random.Next(10000000, 99999999);

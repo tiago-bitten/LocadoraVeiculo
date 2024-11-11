@@ -8,8 +8,8 @@ namespace Locadora.Aluguel.Repositories;
 #region Interface
 public interface IRepAluguel : IRepBase<Models.Aluguel>
 {
-    Task<bool> ClienteEstaComAluguelEmAndamentoAsync(string idCliente);
-    Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string idVeiculo);
+    Task<bool> ClienteEstaComAluguelEmAndamentoAsync(string codigoCliente);
+    Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string codigoVeiculo);
 }
 #endregion
 
@@ -19,21 +19,21 @@ public class RepAluguel : RepBase<Models.Aluguel>, IRepAluguel
     {
     }
 
-    #region ClienteEstaComAluguelEmAndamento
-    public Task<bool> ClienteEstaComAluguelEmAndamentoAsync(string idCliente)
+    #region ClienteEstaComAluguelEmAndamentoAsync
+    public Task<bool> ClienteEstaComAluguelEmAndamentoAsync(string codigoCliente)
     {
         return (from al in DbSet
-            where al.CodigoCliente == idCliente
+            where al.CodigoCliente == codigoCliente
                   && al.Status == EStatusAluguel.EmAndamento
             select 1).AnyAsync();
     }
     #endregion
     
     #region VeiculoEstaComAluguelEmAndamentoAsync
-    public Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string idVeiculo)
+    public Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string codigoVeiculo)
     {
         return (from al in DbSet
-            where al.CodigoVeiculo == idVeiculo
+            where al.CodigoVeiculo == codigoVeiculo
                   && al.Status == EStatusAluguel.EmAndamento
             select 1).AnyAsync();
     }

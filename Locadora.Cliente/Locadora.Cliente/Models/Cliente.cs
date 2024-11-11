@@ -58,9 +58,7 @@ public sealed class Cliente : EntidadeBase
             var idade = hoje.Year - DataNascimento.Year;
 
             if (DataNascimento.Date > hoje.AddYears(-idade)) 
-            {
                 idade--;
-            }
 
             return idade;
         }

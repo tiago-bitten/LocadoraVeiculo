@@ -12,11 +12,22 @@ public sealed class Aluguel : EntidadeBase
     public decimal ValorTotal { get; set; }
     
     #region Regras
+    
+    #region ValidarDatas
     public void ValidarDatas()
     {
         if (DataInicio > DataFinal)
             throw new AluguelAppException(ETipoException.DataInicialMaiorQueDataFinal);
     }
+    #endregion
+
+    #region ValidarValorTotal
+    public void ValidarValorTotal()
+    {
+        if (ValorTotal < 0)
+            throw new AluguelAppException(ETipoException.ValorTotalAluguelInvalido);
+    }
+    #endregion
     
     #region Status
     public void Programar() => Status = EStatusAluguel.Programdo;
