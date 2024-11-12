@@ -1,5 +1,4 @@
 using Locadora.Cliente.Enterprise;
-using Locadora.Cliente.Repositories.Infra;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +14,14 @@ builder.Services.AddControllers()
 builder.Services.ConfigureDatabase(connectionString);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureAutoMapper();
+builder.Services.ConfigureCors();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {

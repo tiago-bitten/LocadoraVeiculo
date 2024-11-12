@@ -30,6 +30,7 @@ public class AluguelAppException : Exception
             ETipoException.ClienteEstaComAluguelEmAndamento => "O cliente está com um aluguel em andamento.",
             ETipoException.VeiculoEstaComAluguelEmAndamento => "O veículo está com um aluguel em andamento.",
             ETipoException.ValorTotalAluguelInvalido => "O valor minimo do aluguel precisa ser mairo que zero.",
+            ETipoException.ErroIntegracaoCliente => "Ocorreu um erro na integração com o sistema de clientes.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -40,5 +41,6 @@ public enum ETipoException
     DataInicialMaiorQueDataFinal = 1,
     ClienteEstaComAluguelEmAndamento = 2,
     VeiculoEstaComAluguelEmAndamento = 3,
-    ValorTotalAluguelInvalido = 4
+    ValorTotalAluguelInvalido = 4,
+    ErroIntegracaoCliente = 5
 }

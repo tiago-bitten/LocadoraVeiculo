@@ -38,6 +38,23 @@ namespace Locadora.Cliente.Enterprise
         public static IServiceCollection ConfigureAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(ClienteProfile));
+           
+            return services;
+        }
+        #endregion
+
+        #region AddCors
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()                              
+                    .AllowAnyMethod()    
+                          .AllowAnyHeader();   
+                });
+            });
 
             return services;
         }

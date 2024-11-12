@@ -1,4 +1,8 @@
-﻿namespace Locadora.Aluguel.Services.Integracoes;
+﻿using Locadora.Aluguel.Controllers.Infra;
+using Locadora.Aluguel.Enterprise;
+using Locadora.Aluguel.Extensions;
+
+namespace Locadora.Aluguel.Services.Integracoes;
 
 #region Interface
 public interface IClienteHelper
@@ -10,7 +14,9 @@ public interface IClienteHelper
 public class ClienteHelper : IClienteHelper
 {
     #region Constants
-    private string 
+    private string UrlBase => "https://localhost:7084/api";
+
+    private string ActionObterClientePorId => "/Clientes/{0}";
     #endregion
     
     #region Ctor
@@ -26,7 +32,15 @@ public class ClienteHelper : IClienteHelper
     #region ObterPorIdAsync
     public async Task<ResultadoClienteDto> ObterPorIdAsync(string codigoCliente)
     {
-        throw new NotImplementedException();
+        var url = UrlBase + string.Format(ActionObterClientePorId, codigoCliente);
+
+        var resposta = await _httpClient.GetAsync<ResultadoClienteDto>(url);
+
+        if (resposta.Sucesso)
+            return resposta.Conteudo;
+
+        var mensagem = resposta?.Mensagem ?? "Sem resposta do serviço de cliente";
+        throw new AluguelAppException(ETipoException.ErroIntegracaoCliente, mensagem);
     }
     #endregion
 }
