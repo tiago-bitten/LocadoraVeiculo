@@ -1,6 +1,4 @@
-﻿using Locadora.Aluguel.Controllers.Infra;
-using Locadora.Aluguel.Enterprise;
-using Locadora.Aluguel.Extensions;
+﻿using Locadora.Aluguel.Enterprise;
 
 namespace Locadora.Aluguel.Services.Integracoes;
 
@@ -11,30 +9,19 @@ public interface IClienteHelper
 }
 #endregion
 
-public class ClienteHelper : IClienteHelper
+public class ClienteHelper : HttpClientBase, IClienteHelper
 {
-    #region Constants
-    private string UrlBase => "https://localhost:7084/api";
+    private const string UrlBase = "https://localhost:7084/api";
+    private const string ActionObterClientePorId = "/Clientes/{0}";
 
-    private string ActionObterClientePorId => "/Clientes/{0}";
-    #endregion
-    
-    #region Ctor
-    private readonly HttpClient _httpClient;
-
-    public ClienteHelper(HttpClient httpClient)
+    public ClienteHelper(HttpClient httpClient) : base(httpClient)
     {
-        _httpClient = httpClient;
     }
 
-    #endregion
-    
-    #region ObterPorIdAsync
     public async Task<ResultadoClienteDto> ObterPorIdAsync(string codigoCliente)
     {
-        var url = UrlBase + string.Format(ActionObterClientePorId, codigoCliente);
-
-        var resposta = await _httpClient.GetAsync<ResultadoClienteDto>(url);
+        var url = $"{UrlBase}{string.Format(ActionObterClientePorId, codigoCliente)}";
+        var resposta = await GetAsync<ResultadoClienteDto>(url);
 
         if (resposta.Sucesso)
             return resposta.Conteudo;
@@ -42,8 +29,8 @@ public class ClienteHelper : IClienteHelper
         var mensagem = resposta?.Mensagem ?? "Sem resposta do serviço de cliente";
         throw new AluguelAppException(ETipoException.ErroIntegracaoCliente, mensagem);
     }
-    #endregion
 }
+
 
 #region Dtos
 
