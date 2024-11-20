@@ -28,3 +28,4 @@ public record ResultadoClienteDto(
     string Telefone,
     string Endereco);
     
+public record ClienteValidoDto(bool Valido, string Mensagem);

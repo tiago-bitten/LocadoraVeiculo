@@ -19,7 +19,7 @@ public class VeiculosController : ControllerVeiculoBase
     #endregion
 
     #region Adicionar
-    [HttpPost("Adicionar")]
+    [HttpPost("[action]")]
     public async Task<IActionResult> Adicionar([FromBody] AdicionarVeiculoDto dto)
     {
         try
@@ -42,9 +42,7 @@ public class VeiculosController : ControllerVeiculoBase
         {
             var resultado = await _aplicVeiculo.ObterPorIdAsync(id);
 
-            return resultado is null ?
-                RespostaSemConteudo($"Não foi encontrado o veículo com id {id}.") :
-                RespostaSucesso(resultado, "Veículo encontrado com sucesso.");
+            return RespostaSucesso(resultado, "Veículo encontrado com sucesso.");
         }
         catch (Exception e)
         {
@@ -70,7 +68,8 @@ public class VeiculosController : ControllerVeiculoBase
     }
     #endregion
 
-    #region RecuperarParaAlugar
+    #region ObterParaAlugar
+    [HttpGet("ObterParaAlugar")]
     public async Task<IActionResult> ObterParaAlugar([FromQuery] QueryObterParaAlugar query)
     {
         try
@@ -78,6 +77,22 @@ public class VeiculosController : ControllerVeiculoBase
             var resultado = await _aplicVeiculo.ObterParaAlugarAsync(query);
             return RespostaListagem(resultado.Listagem, resultado.Total,
                 "Listagem de veiculos disponível para aluguel realizada com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
+    
+    #region ValidarParaAlugar
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ValidarParaAlugar([FromQuery] QueryValidarParaAlugar queryValidarParaAlugar)
+    {
+        try
+        {
+            var resultado = await _aplicVeiculo.ValidarParaAlugarAsync(queryValidarParaAlugar);
+            return RespostaSucesso(resultado);
         }
         catch (Exception e)
         {

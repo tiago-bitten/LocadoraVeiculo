@@ -10,6 +10,11 @@ public class QueryObterParaAlugar : QueryFiltro
     public DateTime DataFinal { get; set; }
 }
 
+public record QueryValidarParaAlugar(
+    string Id,
+    DateTime DataInicial,
+    DateTime DataFinal);
+
 public class VeiculoProfile : Profile
 {
     public VeiculoProfile()
@@ -36,4 +41,6 @@ public record ResultadoVeiculoDto(
     string placa,
     EStatusVeiculo Status,
     decimal ValorDiaria);
+
+public record VeiculoValidoDto(bool Valido, string Mensagem);
     

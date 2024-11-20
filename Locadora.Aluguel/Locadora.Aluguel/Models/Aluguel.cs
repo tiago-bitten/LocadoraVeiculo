@@ -1,4 +1,5 @@
-﻿using Locadora.Aluguel.Enterprise;
+﻿using System.Text.Json.Serialization;
+using Locadora.Aluguel.Enterprise;
 
 namespace Locadora.Aluguel.Models;
 
@@ -39,6 +40,7 @@ public sealed class Aluguel : EntidadeBase
 }
 
 #region Enums
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum EStatusAluguel {
     Programdo = 1,
     EmAndamento = 2,
