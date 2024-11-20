@@ -3,6 +3,7 @@ using Locadora.Cliente.AplicServices.Infra;
 using Locadora.Cliente.Controllers.Infra;
 using Locadora.Cliente.Dtos;
 using Locadora.Cliente.Enterprise;
+using Locadora.Cliente.Extensions;
 using Locadora.Cliente.Repositories.Infra;
 using Locadora.Cliente.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public interface IAplicCliente
     Task<ResultadoClienteDto> AdicionarAsync(AdicionarClienteDto dto);
     Task<ResultadoClienteDto?> ObterPorIdAsync(string id);
     Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro? filtro);
+    Task<ClienteValidoDto> ValidarParaAlugarAsync(string id);
 }
 #endregion
 
@@ -77,6 +79,20 @@ public class AplicCliente : AplicBase<Models.Cliente, IServCliente>, IAplicClien
         var resultado = Mapper.Map<List<ResultadoClienteDto>>(lista);
 
         return (resultado, total);
+    }
+    #endregion
+    
+    #region ValidarParaAlugarAsync
+    public async Task<ClienteValidoDto> ValidarParaAlugarAsync(string id)
+    {
+        var cliente = await Service.ObterPorIdAsync(id);
+        cliente.ExcecaoSeNulo(ETipoException.ClienteNaoEncontrado);
+
+        var (valido, mensagem) = Service.ValidoParaAlugar(cliente);
+
+        var resposta = new ClienteValidoDto(valido, mensagem);
+        
+        return resposta;
     }
     #endregion
 }

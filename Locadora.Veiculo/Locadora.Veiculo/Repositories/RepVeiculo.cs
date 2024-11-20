@@ -34,7 +34,7 @@ public class RepVeiculo : RepBase<Models.Veiculo>, IRepVeiculo
             join ma in Context.Set<Manutencao>() on ve.Id equals ma.CodigoVeiculo into manutencoes
             from ma in manutencoes.DefaultIfEmpty()
             where ve.Status == EStatusVeiculo.Disponivel
-                  && (ma is null 
+                  && (ma == null 
                       || (ma.Status != EStatusManutencao.EmAndamento 
                           && !(ma.Status == EStatusManutencao.Programada && ma.DataInicio <= dataFinal && ma.DataFinal >= dataInicial))
                   )

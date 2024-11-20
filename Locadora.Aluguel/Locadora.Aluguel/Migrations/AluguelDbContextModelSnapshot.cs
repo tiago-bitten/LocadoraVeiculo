@@ -33,6 +33,9 @@ namespace Locadora.Aluguel.Migrations
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DataFinal")
                         .HasColumnType("TEXT");
 
@@ -50,6 +53,10 @@ namespace Locadora.Aluguel.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CodigoCliente");
+
+                    b.HasIndex("CodigoVeiculo");
 
                     b.ToTable("Aluguels");
                 });

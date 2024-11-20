@@ -48,11 +48,11 @@ public class HttpClientBase
     #region ProcessResponse
     private async Task<RespostaBase<T>> ProcessResponse<T>(HttpResponseMessage response) where T : class
     {
-        var result = new RespostaBase<T> { Sucesso = response.IsSuccessStatusCode };
+        var result = new RespostaBase<T>();
 
         if (response.IsSuccessStatusCode)
         {
-            result.Conteudo = await response.Content.ReadFromJsonAsync<T>();
+            result = await response.Content.ReadFromJsonAsync<RespostaBase<T>>();
         }
         else
         {

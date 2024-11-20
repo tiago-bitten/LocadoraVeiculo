@@ -7,6 +7,7 @@ namespace Locadora.Cliente.Services;
 #region Interface
 public interface IServCliente : IServBase<Models.Cliente>
 {
+    (bool Valido, string Mensagem) ValidoParaAlugar(Models.Cliente cliente);
 }
 #endregion
 
@@ -32,6 +33,16 @@ public class ServCliente : ServBase<Models.Cliente, IRepCliente>, IServCliente
         cliente.ValidarIdadeMinima();
 
         await base.AdicionarAsync(cliente);
+    }
+    #endregion
+
+    #region ValidarParaAlugarAsync
+    public (bool Valido, string Mensagem) ValidoParaAlugar(Models.Cliente cliente)
+    {
+        if (cliente.Inativo)
+            return (false, "Cliente inativo.");
+
+        return (true, "Cliente está disponível.");
     }
     #endregion
 } 

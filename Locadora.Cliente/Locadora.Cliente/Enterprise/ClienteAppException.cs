@@ -33,6 +33,7 @@ public class ClienteAppException : Exception
             ETipoException.ClienteComEmailJaExiste => "Já existe um cliente com esse e-mail registrado.",
             ETipoException.ClienteComCpfJaExiste => "Já existe um cliente com esse cpf registrado.",
             ETipoException.IdadeMinimaDeCadastro => "O cliente precisa ser maior de idade.",
+            ETipoException.ClienteNaoEncontrado => "Cliente não encontrado.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -46,5 +47,6 @@ public enum ETipoException
     TelefoneInvalido = 4,
     ClienteComEmailJaExiste = 5,
     ClienteComCpfJaExiste = 6,
-    IdadeMinimaDeCadastro = 7
+    IdadeMinimaDeCadastro = 7,
+    ClienteNaoEncontrado = 8
 }

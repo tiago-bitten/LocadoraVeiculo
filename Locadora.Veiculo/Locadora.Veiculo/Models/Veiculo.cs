@@ -1,4 +1,5 @@
-﻿using Locadora.Veiculo.Enterprise;
+﻿using System.Text.Json.Serialization;
+using Locadora.Veiculo.Enterprise;
 using Locadora.Veiculo.Helpers;
 
 namespace Locadora.Veiculo.Models;
@@ -86,7 +87,7 @@ public class Veiculo : EntidadeBase
     #endregion
     #endregion
 }
-
+[JsonConverter(typeof(JsonStringEnumConverter))]
 #region Enums
 public enum EStatusVeiculo
 {
@@ -96,7 +97,7 @@ public enum EStatusVeiculo
     Reservado = 4,
     Vendido = 5
 }
-
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ETipoVeiculo
 {
     Carro = 1,
@@ -108,6 +109,7 @@ public enum ETipoVeiculo
     Outros = 99
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum EModeloVeiculo
 {
     // Modelos de Carros

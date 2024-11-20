@@ -1,30 +1,39 @@
-﻿using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using Locadora.Aluguel.AplicServices.Infra;
 using Locadora.Aluguel.Dtos;
+using Locadora.Aluguel.Enterprise;
+using Locadora.Aluguel.Extensions;
 using Locadora.Aluguel.Repositories.Infra;
 using Locadora.Aluguel.Services;
 using Locadora.Aluguel.Services.Integracoes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Aluguel.AplicServices;
 
+#region Interface
 public interface IAplicAluguel
 {
     Task<RespostaAluguelDto> AdicionarAsync(AdicionarAluguelDto dto);
+    Task<ResultadoVeiculoDto> ObterPorIdAsync(string id);
+    Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
 }
+#endregion
 
 public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAluguel
 {
     #region Ctor
     private readonly IClienteHelper _clienteHelper;
+    private readonly IVeiculoHelper _veiculoHelper;
     
     public AplicAluguel(IMapper mapper,
                         IServAluguel service,
                         IUnitOfWork uow,
-                        IClienteHelper clienteHelper) 
+                        IClienteHelper clienteHelper, 
+                        IVeiculoHelper veiculoHelper) 
         : base(mapper, service, uow)
     {
         _clienteHelper = clienteHelper;
+        _veiculoHelper = veiculoHelper;
     }
     #endregion
 
@@ -32,6 +41,10 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
     public async Task<RespostaAluguelDto> AdicionarAsync(AdicionarAluguelDto dto)
     {
         var clienteDto = await _clienteHelper.ObterPorIdAsync(dto.CodigoCliente);
+        var veiculoDto = await _veiculoHelper.ObterPorIdAsync(dto.CodigoVeiculo);
+        
+        clienteDto.ExcecaoSeNulo(ETipoException.ClienteNaoEncontrado);
+        veiculoDto.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
         
         var aluguel = Mapper.Map<Models.Aluguel>(dto);
         
@@ -46,4 +59,33 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         return resposta;
     }
     #endregion
+
+    public async Task<ResultadoVeiculoDto> ObterPorIdAsync(string id)
+    {
+        var veiculo = await _veiculoHelper.ObterPorIdAsync(id);
+        veiculo.ExcecaoSeNulo(ETipoException.AluguelNaoEncontrado);
+
+        return veiculo;
+    }
+
+    public async Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro queryFiltro)
+    {
+        var query = Service.ObterTodos();
+        var total = await query.CountAsync();
+
+        if (queryFiltro.Skip.HasValue)
+        {
+            query = query.Skip(queryFiltro.Skip.Value);
+        }
+        
+        if (queryFiltro.Take.HasValue)
+        {
+            query = query.Take(queryFiltro.Take.Value);
+        }
+        
+        var listagem = await query.ToListAsync();
+        var resposta = Mapper.Map<List<RespostaAluguelDto>>(listagem);
+        
+        return (resposta, total);
+    }
 }

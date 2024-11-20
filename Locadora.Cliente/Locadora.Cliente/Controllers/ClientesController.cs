@@ -19,8 +19,7 @@ public class ClientesController : ControllerClienteBase
     #endregion
     
     #region Adicionar
-    [HttpPost]
-    [HttpPost("Adicionar")]
+    [HttpPost("[action]")]
     public async Task<IActionResult> Adicionar([FromBody] AdicionarClienteDto dto)
     {
         try
@@ -56,13 +55,28 @@ public class ClientesController : ControllerClienteBase
 
     #region ObterTodos
     [HttpGet]
-    [HttpGet("ObterTodos")]
     public async Task<IActionResult> ObterTodos([FromQuery] QueryFiltro filtro)
     {
         try
         {
             var resultado = await _aplicCliente.ObterTodosAsync(filtro);
             return RespostaListagem(resultado.Listagem, resultado.Total);
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
+
+    #region ValidarClienteParaAlugar
+    [HttpGet("[action]/{id}")]
+    public async Task<IActionResult> ValidarParaAlugar(string id)
+    {
+        try
+        {
+            var resultado = await _aplicCliente.ValidarParaAlugarAsync(id);
+            return RespostaSucesso(resultado);
         }
         catch (Exception e)
         {
