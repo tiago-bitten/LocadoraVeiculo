@@ -17,7 +17,10 @@ public class Manutencao : EntidadeBase
     #region Regras
     public void ValidarDatas()
     {
-        if (DataInicio > DataFinal)
+        if (!DataFinal.HasValue)
+            return;
+        
+        if (DataInicio > DataFinal.Value)
             throw new VeiculoAppException(ETipoException.DataInicialMaiorQueFinal);
     }
 
