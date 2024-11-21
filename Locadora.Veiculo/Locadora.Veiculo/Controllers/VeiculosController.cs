@@ -100,4 +100,20 @@ public class VeiculosController : ControllerVeiculoBase
         }
     }
     #endregion
+    
+    #region Atualizar
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Atualizar([FromBody] AtualizarVeiculoDto dto)
+    {
+        try
+        {
+            var resultado = await _aplicVeiculo.AtualizarAsync(dto);
+            return RespostaSucesso(resultado, "Veículo atualizado com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

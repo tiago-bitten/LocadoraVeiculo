@@ -16,6 +16,7 @@ public interface IAplicVeiculo
     Task<(List<ResultadoVeiculoDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
     Task<(List<ResultadoVeiculoDto> Listagem, int Total)> ObterParaAlugarAsync(QueryObterParaAlugar query);
     Task<VeiculoValidoDto> ValidarParaAlugarAsync(QueryValidarParaAlugar queryValidarParaAlugar);
+    Task<ResultadoVeiculoDto> AtualizarAsync(AtualizarVeiculoDto dto);
 }
 #endregion
 
@@ -108,6 +109,26 @@ public class AplicVeiculo : AplicBase<Models.Veiculo, IServVeiculo>, IAplicVeicu
 
         var resultado = new VeiculoValidoDto(valido, mensagem);
         
+        return resultado;
+    }
+    #endregion
+    
+    #region AtualizarAsync
+    public async Task<ResultadoVeiculoDto> AtualizarAsync(AtualizarVeiculoDto dto)
+    {
+        var veiculo = await Service.ObterPorIdAsync(dto.CodigoVeiculo);
+        veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
+        
+        Mapper.Map(dto, veiculo);
+        
+        veiculo.ValidarDataFabricao();
+        
+        await Uow.IniciarTransacaoAsync();
+        Service.Atualizar(veiculo);
+        await Uow.PersistirTransacaoAsync();
+        
+        var resultado = Mapper.Map<ResultadoVeiculoDto>(veiculo);
+
         return resultado;
     }
     #endregion

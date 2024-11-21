@@ -14,6 +14,7 @@ public interface IAplicManutencao
     Task<ResultadoManutencaoDto> AdicionarAsync(CriarManutencaoDto dto);
     Task<ResultadoManutencaoDto> ObterPorIdAsync(string id);
     Task<(List<ResultadoManutencaoDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
+    Task ConcluirAsync(string id);
 }
 
 public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IAplicManutencao
@@ -95,6 +96,27 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
         var resultado = Mapper.Map<List<ResultadoManutencaoDto>>(listagem);
 
         return (resultado, total);
+    }
+    #endregion
+    
+    #region ConcluirAsync
+    public async Task ConcluirAsync(string id)
+    {
+        var manutencao = await Service.ObterPorIdAsync(id);
+        manutencao.ExcecaoSeNulo(ETipoException.ManutencaoNaoEncontrada);
+        
+        manutencao.Concluir();
+        
+        await Uow.IniciarTransacaoAsync();
+        await Service.AtualizarAsync(manutencao);
+        
+        var veiculo = await _servVeiculo.ObterPorIdAsync(manutencao.CodigoVeiculo);
+        veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
+        
+        veiculo.Disponivel();
+        _servVeiculo.Atualizar(veiculo);
+        
+        await Uow.PersistirTransacaoAsync();
     }
     #endregion
 }

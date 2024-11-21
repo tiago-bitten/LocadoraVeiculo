@@ -84,4 +84,20 @@ public class ClientesController : ControllerClienteBase
         }
     }
     #endregion
+    
+    #region Atualizar
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Atualizar([FromBody] AtualizarClienteDto dto)
+    {
+        try
+        {
+            var resposta = await _aplicCliente.AtualizarAsync(dto);
+            return RespostaSucesso(resposta, "Cliente atualizado com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

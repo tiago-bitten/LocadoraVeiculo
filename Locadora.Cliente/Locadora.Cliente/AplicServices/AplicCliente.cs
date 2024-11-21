@@ -17,6 +17,7 @@ public interface IAplicCliente
     Task<ResultadoClienteDto?> ObterPorIdAsync(string id);
     Task<(List<ResultadoClienteDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro? filtro);
     Task<ClienteValidoDto> ValidarParaAlugarAsync(string id);
+    Task<ResultadoClienteDto> AtualizarAsync(AtualizarClienteDto dto);
 }
 #endregion
 
@@ -93,6 +94,29 @@ public class AplicCliente : AplicBase<Models.Cliente, IServCliente>, IAplicClien
         var resposta = new ClienteValidoDto(valido, mensagem);
         
         return resposta;
+    }
+    #endregion
+    
+    #region AtualizarAsync
+    public async Task<ResultadoClienteDto> AtualizarAsync(AtualizarClienteDto dto)
+    {
+        var cliente = await Service.ObterPorIdAsync(dto.CodigoCliente);
+        cliente.ExcecaoSeNulo(ETipoException.ClienteNaoEncontrado);
+
+        Mapper.Map(dto, cliente);
+        
+        cliente.ValidarCpf();
+        cliente.ValidarEmail();
+        cliente.ValidarTelefone();
+        cliente.ValidarDataNascimento();
+        
+        await Uow.IniciarTransacaoAsync();
+        Service.Atualizar(cliente);
+        await Uow.PersistirTransacaoAsync();
+        
+        var resultado = Mapper.Map<ResultadoClienteDto>(cliente);
+
+        return resultado;
     }
     #endregion
 }

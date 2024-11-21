@@ -67,4 +67,20 @@ public class ManutencoesController : ControllerVeiculoBase
         }
     }
     #endregion
+    
+    #region Concluir
+    [HttpPut("[action]/{id}")]
+    public async Task<IActionResult> Concluir(string id)
+    {
+        try
+        {
+            await _aplicManutencao.ConcluirAsync(id);
+            return RespostaSemConteudo("Veículo concluído com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

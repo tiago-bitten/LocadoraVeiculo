@@ -11,6 +11,7 @@ public class ClienteProfile : Profile
     }
 }
 
+#region AdicionarClienteDto
 public record AdicionarClienteDto(
     string Nome, 
     string Cpf,
@@ -18,7 +19,9 @@ public record AdicionarClienteDto(
     DateTime DataNascimento,
     string Telefone,
     string Endereco);
+#endregion
 
+#region ResultadoClienteDto
 public record ResultadoClienteDto(
     string Id,
     string Nome,
@@ -27,5 +30,19 @@ public record ResultadoClienteDto(
     DateTime DataNascimento,
     string Telefone,
     string Endereco);
+#endregion
+
+#region AtualizarClienteDto
+public record AtualizarClienteDto(
+    string CodigoCliente,
+    string Nome,
+    string Cpf,
+    string Email,
+    DateTime DataNascimento,
+    string Telefone,
+    string Endereco);
+#endregion
     
+#region ClienteValidoDto
 public record ClienteValidoDto(bool Valido, string Mensagem);
+#endregion

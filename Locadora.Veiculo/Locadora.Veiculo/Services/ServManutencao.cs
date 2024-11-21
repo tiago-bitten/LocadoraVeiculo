@@ -8,6 +8,7 @@ namespace Locadora.Veiculo.Services;
 #region Inteface
 public interface IServManutencao : IServBase<Manutencao>
 {
+    void Concluir(Manutencao manutencao);
 }
 #endregion
 
@@ -35,5 +36,16 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
         await base.AdicionarAsync(manutencao);
     }
 
+    #endregion
+    
+    #region ConcluirAsync
+    public void Concluir(Manutencao manutencao)
+    {
+        manutencao.ValidarManutencaoConcluida();
+        
+        manutencao.Concluir();
+        
+        Atualizar(manutencao);
+    }
     #endregion
 }
