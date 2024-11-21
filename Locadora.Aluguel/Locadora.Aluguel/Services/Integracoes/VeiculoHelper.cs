@@ -6,7 +6,7 @@ namespace Locadora.Aluguel.Services.Integracoes;
 public interface IVeiculoHelper
 {
     Task<ResultadoVeiculoDto> ObterPorIdAsync(string codigoCliente);
-    Task<VeiculoValidoDto> ValidarVeiculoAsync(string codigoVeiculo);
+    Task<VeiculoValidoDto> ValidarVeiculoAsync(QueryValidarParaAlugar query);
 }
 #endregion
 
@@ -14,7 +14,7 @@ public class VeiculoHelper : HttpClientBase, IVeiculoHelper
 {
     private const string UrlBase = "https://localhost:60537/api";
     private const string ActionObterVeiculoPorId = "/Veiculos/{0}";
-    private const string ActionValidarParaAlugar = "/Veiculos/ValidarParaAlugar/{0}";
+    private const string ActionValidarParaAlugar = "/Veiculos/ValidarParaAlugar?{0}";
 
     public VeiculoHelper(HttpClient httpClient) : base(httpClient)
     {
@@ -35,18 +35,20 @@ public class VeiculoHelper : HttpClientBase, IVeiculoHelper
     #endregion
     
     #region ValidarVeiculoAsync
-    public async Task<VeiculoValidoDto> ValidarVeiculoAsync(string codigoVeiculo)
+    public async Task<VeiculoValidoDto> ValidarVeiculoAsync(QueryValidarParaAlugar query)
     {
-        var url = $"{UrlBase}{string.Format(ActionValidarParaAlugar, codigoVeiculo)}";
+        var queryStr = $"CodigoVeiculo={query.CodigoVeiculo}&DataInicial={query.DataInicial:yyyy-MM-dd}&DataFinal={query.DataFinal:yyyy-MM-dd}";
+        var url = $"{UrlBase}{string.Format(ActionValidarParaAlugar, queryStr)}";
         var resposta = await GetAsync<VeiculoValidoDto>(url);
 
         if (resposta.Sucesso)
             return resposta.Conteudo;
-        
+
         var mensagem = resposta?.Mensagem ?? "Sem resposta do serviço de veículo";
         throw new AluguelAppException(ETipoException.ErroIntegracaoVeiculo, mensagem);
     }
     #endregion
+
 }
 
 #region Dtos
@@ -67,5 +69,12 @@ public record ResultadoVeiculoDto(
 public record VeiculoValidoDto(
     bool Valido,
     string Mensagem);
+#endregion
+
+#region QueryValidarParaAlugar
+public record QueryValidarParaAlugar(
+    string CodigoVeiculo,
+    DateTime DataInicial,
+    DateTime DataFinal);
 #endregion
 #endregion
