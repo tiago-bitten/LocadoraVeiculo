@@ -10,10 +10,22 @@ public class VeiculoDbContext : DbContext
     }
     
     public DbSet<Models.Veiculo> Veiculos { get; set; }
+    public DbSet<Manutencao> Manutencoes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Manutencao>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Status)
+                .HasConversion<string>();
+
+            entity.Property(x => x.Id)
+                .HasDefaultValueSql("'manutencao_' || abs(random() % 89999999 + 10000000)");
+        });
 
         modelBuilder.Entity<Models.Veiculo>(entity =>
         {
@@ -27,14 +39,10 @@ public class VeiculoDbContext : DbContext
 
             entity.Property(x => x.Status)
                 .HasConversion<string>();
-        });
 
-        modelBuilder.Entity<Models.Manutencao>(entity =>
-        {
-            entity.HasKey(x => x.Id);
-
-            entity.Property(x => x.Status)
-                .HasConversion<string>();
+            entity.Property(x => x.Id)
+                .HasDefaultValueSql("'veiculo_' || abs(random() % 89999999 + 10000000)");
         });
     }
+
 }

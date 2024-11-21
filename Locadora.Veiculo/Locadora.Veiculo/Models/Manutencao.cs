@@ -2,7 +2,7 @@
 
 namespace Locadora.Veiculo.Models;
 
-public class Manutencao : EntidadeBase
+public sealed class Manutencao : EntidadeBase
 {
     public string CodigoVeiculo { get; set; }
     public ETipoManutencao Tipo { get; set; }

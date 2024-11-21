@@ -18,7 +18,7 @@ public class AlugueisController : ControllerAluguelBase
     }
     #endregion
     
-    #region AdicionarAsync
+    #region Adicionar
     [HttpPost("[action]")]
     public async Task<IActionResult> Adicionar([FromBody] AdicionarAluguelDto dto)
     {
@@ -61,6 +61,23 @@ public class AlugueisController : ControllerAluguelBase
             var resposta = await _aplicAluguel.ObterTodosAsync(queryFiltro);
 
             return RespostaListagem(resposta.Listagem, resposta.Total, "Alugueis obtidos com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
+    
+    #region Concluir
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Concluir([FromBody] ConcluirAluguelDto dto)
+    {
+        try
+        {
+            await _aplicAluguel.ConcluirAsync(dto);
+
+            return RespostaSemConteudo("Aluguel concluído com sucesso.");
         }
         catch (Exception e)
         {

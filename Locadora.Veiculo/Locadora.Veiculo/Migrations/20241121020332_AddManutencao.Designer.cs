@@ -3,6 +3,7 @@ using System;
 using Locadora.Veiculo.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Locadora.Veiculo.Migrations
 {
     [DbContext(typeof(VeiculoDbContext))]
-    partial class VeiculoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241121020332_AddManutencao")]
+    partial class AddManutencao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -51,13 +54,14 @@ namespace Locadora.Veiculo.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("VeiculoId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("VeiculoId");
 
-                    b.ToTable("Manutencoes");
+                    b.ToTable("Manutencao");
                 });
 
             modelBuilder.Entity("Locadora.Veiculo.Models.Veiculo", b =>
@@ -111,7 +115,9 @@ namespace Locadora.Veiculo.Migrations
                 {
                     b.HasOne("Locadora.Veiculo.Models.Veiculo", "Veiculo")
                         .WithMany("Manutencoes")
-                        .HasForeignKey("VeiculoId");
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Veiculo");
                 });

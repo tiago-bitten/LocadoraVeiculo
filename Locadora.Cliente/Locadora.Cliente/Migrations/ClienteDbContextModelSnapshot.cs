@@ -20,7 +20,9 @@ namespace Locadora.Cliente.Migrations
             modelBuilder.Entity("Locadora.Cliente.Models.Cliente", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("'cliente_' || abs(random() % 89999999 + 10000000)");
 
                     b.Property<string>("Cpf")
                         .IsRequired()

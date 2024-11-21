@@ -37,6 +37,7 @@ public class AluguelAppException : Exception
             ETipoException.AluguelNaoEncontrado => "Aluguel não encontrado.",
             ETipoException.ClienteNaoValido => "Cliente não é válido.",
             ETipoException.VeiculoNaoValido => "Veículo não é válido.",
+            ETipoException.AluguelNaoPodeSerConcluido => "Apenas alugueis em andamento podem ser concluidos.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -54,5 +55,6 @@ public enum ETipoException
     VeiculoNaoEncontrado = 8,
     AluguelNaoEncontrado = 9,
     ClienteNaoValido = 10,
-    VeiculoNaoValido = 11
+    VeiculoNaoValido = 11,
+    AluguelNaoPodeSerConcluido = 12
 }

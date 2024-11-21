@@ -23,6 +23,9 @@ public class AluguelDbContext : DbContext
 
             entity.HasIndex(x => x.CodigoCliente);
             entity.HasIndex(x => x.CodigoVeiculo);
+            
+            entity.Property(x => x.Id)
+                .HasDefaultValueSql("'aluguel_' || abs(random() % 89999999 + 10000000)");
         });
     }
 }
