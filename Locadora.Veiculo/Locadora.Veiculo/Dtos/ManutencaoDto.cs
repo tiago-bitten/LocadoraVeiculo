@@ -14,7 +14,7 @@ public class ManutencaoProfile : Profile
 
 public record CriarManutencaoDto(
     string CodigoVeiculo,
-    ETipoManutencao Tipo,
+    bool Programada,
     DateTime DataInicio,
     DateTime? DataFinal);
     
