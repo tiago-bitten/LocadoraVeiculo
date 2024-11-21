@@ -11,7 +11,7 @@ public class QueryObterParaAlugar : QueryFiltro
 }
 
 public record QueryValidarParaAlugar(
-    string Id,
+    string CodigoVeiculo,
     DateTime DataInicial,
     DateTime DataFinal);
 

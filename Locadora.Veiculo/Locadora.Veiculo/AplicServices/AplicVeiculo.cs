@@ -101,7 +101,7 @@ public class AplicVeiculo : AplicBase<Models.Veiculo, IServVeiculo>, IAplicVeicu
 
     public async Task<VeiculoValidoDto> ValidarParaAlugarAsync(QueryValidarParaAlugar queryValidarParaAlugar)
     {
-        var veiculo = await Service.ObterPorIdAsync(queryValidarParaAlugar.Id);
+        var veiculo = await Service.ObterPorIdAsync(queryValidarParaAlugar.CodigoVeiculo);
         veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
         
         var (valido, mensagem) = await Service.ValidoParaAlugarAsync(veiculo, queryValidarParaAlugar.DataInicial, queryValidarParaAlugar.DataFinal);

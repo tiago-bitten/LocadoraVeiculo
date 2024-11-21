@@ -7,7 +7,8 @@ public class AluguelProfile : Profile
 {
     public AluguelProfile()
     {
-        CreateMap<AdicionarAluguelDto, Models.Aluguel>();
+        CreateMap<AdicionarAluguelDto, Models.Aluguel>()
+            .ForMember(dest => dest.ValorTotal, opt => opt.MapFrom(dto => dto.ValorTotal));
         CreateMap<Models.Aluguel, RespostaAluguelDto>();
     }
 }
@@ -20,7 +21,7 @@ public record AdicionarAluguelDto(
     DateTime DataInicio,
     DateTime DataFinal)
 {
-    public int TotalDias => (DataInicio - DataFinal).Days;
+    public int TotalDias => (DataFinal - DataInicio).Hours / 24;
     public decimal ValorTotal => ValorDiaria * TotalDias;
 }
 #endregion 

@@ -11,7 +11,7 @@ public interface IServAluguel : IServBase<Models.Aluguel>
 {
     Task ValidarDisponibilidadeAsync(Models.Aluguel aluguel);
     Task ValidarDisponibilidadeClienteAsync(string codigoCliente);
-    Task ValidarDisponibilidadeVeiculoAsync(string codigoVeiculo);
+    Task ValidarDisponibilidadeVeiculoAsync(Models.Aluguel aluguel);
     void Concluir(Models.Aluguel aluguel);
 }
 #endregion
@@ -38,7 +38,7 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
         aluguel.ValidarValorTotal();
         await ValidarDisponibilidadeAsync(aluguel);
         await ValidarDisponibilidadeClienteAsync(aluguel.CodigoCliente);
-        await ValidarDisponibilidadeVeiculoAsync(aluguel.CodigoVeiculo);
+        await ValidarDisponibilidadeVeiculoAsync(aluguel);
 
         await base.AdicionarAsync(aluguel);
     }
@@ -69,9 +69,9 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     #endregion
     
     #region ValidarDisponibilidadeVeiculoAsync
-    public async Task ValidarDisponibilidadeVeiculoAsync(string codigoVeiculo)
+    public async Task ValidarDisponibilidadeVeiculoAsync(Models.Aluguel aluguel)
     {
-        var valido = await _veiculoHelper.ValidarVeiculoAsync(codigoVeiculo);
+        var valido = await _veiculoHelper.ValidarVeiculoAsync(new QueryValidarParaAlugar(aluguel.CodigoVeiculo, aluguel.DataInicio, aluguel.DataFinal));
         
         if (!valido.Valido)
             throw new AluguelAppException(ETipoException.VeiculoNaoValido, valido.Mensagem);
