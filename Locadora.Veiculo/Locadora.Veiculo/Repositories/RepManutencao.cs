@@ -10,7 +10,7 @@ namespace Locadora.Veiculo.Repositories;
 public interface IRepManutencao : IRepBase<Manutencao>
 {
     IQueryable<Manutencao> ObterPorVeiculo(string codigoVeiculo);
-    Task<bool> PossuiManutencaoProgramadaPorVeiculoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal);
+    Task<bool> PossuiManutencaoProgramadaPorVeiculoAsync(string codigoVeiculo, DateTime dataInicial, DateTime? dataFinal);
 }
 #endregion
 
@@ -31,7 +31,7 @@ public class RepManutencao : RepBase<Manutencao>, IRepManutencao
     #endregion
 
     #region PossuiManutencaoProgramadaPorVeiculoAsync
-    public Task<bool> PossuiManutencaoProgramadaPorVeiculoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal)
+    public Task<bool> PossuiManutencaoProgramadaPorVeiculoAsync(string codigoVeiculo, DateTime dataInicial, DateTime? dataFinal)
     {
         return (from ma in DbSet
             where ma.CodigoVeiculo == codigoVeiculo

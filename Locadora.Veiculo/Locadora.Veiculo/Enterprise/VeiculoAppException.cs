@@ -39,6 +39,7 @@ public class VeiculoAppException : Exception
             ETipoException.PlacaInvalida => "A placa informada é inválida.",
             ETipoException.VeiculoNaoEncontrado => "Veículo não encontrado.",
             ETipoException.ManutencaoNaoEncontrada => "Manutenção não encontrada.",
+            ETipoException.VeiculoJaPossuiManutencaoProgramada => "Veículo já possui manutenção programada.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -55,5 +56,6 @@ public enum ETipoException
     VeiculoComPlacaJaExiste = 7,
     PlacaInvalida = 8,
     VeiculoNaoEncontrado = 9,
-    ManutencaoNaoEncontrada = 10
+    ManutencaoNaoEncontrada = 10,
+    VeiculoJaPossuiManutencaoProgramada = 11
 }

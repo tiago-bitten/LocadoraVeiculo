@@ -36,17 +36,25 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
     public async Task<ResultadoManutencaoDto> AdicionarAsync(CriarManutencaoDto dto)
     {
         var manutencao = Mapper.Map<Manutencao>(dto);
-        
         manutencao.ValidarDatas();
-
+        
         var veiculo = await _servVeiculo.ObterPorIdAsync(dto.CodigoVeiculo);
         veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
-
-        await Uow.IniciarTransacaoAsync();
-        await Service.AdicionarAsync(manutencao);
         
-        veiculo.EmManutencao();
-        _servVeiculo.Atualizar(veiculo);
+        await Uow.IniciarTransacaoAsync();
+        if (dto.Programada)
+        {
+            manutencao.Programar();
+        }
+        else
+        {
+            manutencao.EmAndamento();
+
+            veiculo.EmManutencao();
+            _servVeiculo.Atualizar(veiculo);
+        }
+
+        await Service.AdicionarAsync(manutencao);
         await Uow.PersistirTransacaoAsync();
         
         var resultado = Mapper.Map<ResultadoManutencaoDto>(manutencao);
