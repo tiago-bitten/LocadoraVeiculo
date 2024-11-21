@@ -17,6 +17,9 @@ public class ClienteDbContext : DbContext
         modelBuilder.Entity<Models.Cliente>(entity =>
         {
             entity.HasKey(x => x.Id);
+            
+            entity.Property(x => x.Id)
+                .HasDefaultValueSql("'cliente_' || abs(random() % 89999999 + 10000000)");
         });
     }
 }

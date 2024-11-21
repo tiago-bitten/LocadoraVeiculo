@@ -12,6 +12,7 @@ public class AluguelProfile : Profile
     }
 }
 
+#region AdicionarAluguelDto
 public record AdicionarAluguelDto(
     string CodigoCliente,
     string CodigoVeiculo,
@@ -22,7 +23,9 @@ public record AdicionarAluguelDto(
     public int TotalDias => (DataInicio - DataFinal).Days;
     public decimal ValorTotal => ValorDiaria * TotalDias;
 }
+#endregion 
 
+#region RespostaAluguelDto
 public record RespostaAluguelDto(
     string Id,
     string CodigoCliente,
@@ -31,3 +34,8 @@ public record RespostaAluguelDto(
     DateTime DataInicio,
     DateTime DataFinal,
     EStatusAluguel Status);
+#endregion
+
+#region ConcluirAluguelDto
+public record ConcluirAluguelDto(string Id);
+#endregion

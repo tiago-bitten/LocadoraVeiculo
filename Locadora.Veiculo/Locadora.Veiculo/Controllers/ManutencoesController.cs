@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.Veiculo.Controllers;
 
-[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+[Route("api/[controller]")]
 public class ManutencoesController : ControllerVeiculoBase
 {
     #region Ctor

@@ -3,6 +3,7 @@ using Locadora.Aluguel.AplicServices.Infra;
 using Locadora.Aluguel.Dtos;
 using Locadora.Aluguel.Enterprise;
 using Locadora.Aluguel.Extensions;
+using Locadora.Aluguel.Models;
 using Locadora.Aluguel.Repositories.Infra;
 using Locadora.Aluguel.Services;
 using Locadora.Aluguel.Services.Integracoes;
@@ -16,6 +17,7 @@ public interface IAplicAluguel
     Task<RespostaAluguelDto> AdicionarAsync(AdicionarAluguelDto dto);
     Task<ResultadoVeiculoDto> ObterPorIdAsync(string id);
     Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
+    Task ConcluirAsync(ConcluirAluguelDto dto);
 }
 #endregion
 
@@ -60,6 +62,7 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
     }
     #endregion
 
+    #region ObterPorIdAsync
     public async Task<ResultadoVeiculoDto> ObterPorIdAsync(string id)
     {
         var veiculo = await _veiculoHelper.ObterPorIdAsync(id);
@@ -67,7 +70,9 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
 
         return veiculo;
     }
+    #endregion 
 
+    #region ObterTodosAsync
     public async Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro queryFiltro)
     {
         var query = Service.ObterTodos();
@@ -88,4 +93,17 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         
         return (resposta, total);
     }
+    #endregion
+    
+    #region ConcluirAsync
+    public async Task ConcluirAsync(ConcluirAluguelDto dto)
+    {
+        var aluguel = await Service.ObterPorIdAsync(dto.Id);
+        aluguel.ExcecaoSeNulo(ETipoException.AluguelNaoEncontrado);
+
+        await Uow.IniciarTransacaoAsync();
+        Service.Concluir(aluguel);
+        await Uow.PersistirTransacaoAsync();
+    }
+    #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using Locadora.Aluguel.Enterprise;
+using Locadora.Aluguel.Models;
 using Locadora.Aluguel.Repositories;
 using Locadora.Aluguel.Services.Infra;
 using Locadora.Aluguel.Services.Integracoes;
@@ -11,6 +12,7 @@ public interface IServAluguel : IServBase<Models.Aluguel>
     Task ValidarDisponibilidadeAsync(Models.Aluguel aluguel);
     Task ValidarDisponibilidadeClienteAsync(string codigoCliente);
     Task ValidarDisponibilidadeVeiculoAsync(string codigoVeiculo);
+    void Concluir(Models.Aluguel aluguel);
 }
 #endregion
 
@@ -73,6 +75,17 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
         
         if (!valido.Valido)
             throw new AluguelAppException(ETipoException.VeiculoNaoValido, valido.Mensagem);
+    }
+    #endregion
+    
+    #region ConcluirAsync
+    public void Concluir(Models.Aluguel aluguel)
+    {
+        if (aluguel.Status is not EStatusAluguel.EmAndamento)
+            throw new AluguelAppException(ETipoException.AluguelNaoPodeSerConcluido);
+        
+        aluguel.Concluir();
+        Atualizar(aluguel);
     }
     #endregion
 }

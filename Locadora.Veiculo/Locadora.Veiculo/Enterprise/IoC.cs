@@ -18,6 +18,7 @@ namespace Locadora.Veiculo.Enterprise
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepVeiculo, RepVeiculo>();
+            services.AddScoped<IRepManutencao, RepManutencao>();
             
             return services;
         }
@@ -28,6 +29,9 @@ namespace Locadora.Veiculo.Enterprise
         {
             services.AddScoped<IAplicVeiculo, AplicVeiculo>();
             services.AddScoped<IServVeiculo, ServVeiculo>();
+
+            services.AddScoped<IAplicManutencao, AplicManutencao>();
+            services.AddScoped<IServManutencao, ServManutencao>();
             
             return services;
         }
