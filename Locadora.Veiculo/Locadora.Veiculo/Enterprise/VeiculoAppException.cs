@@ -38,6 +38,7 @@ public class VeiculoAppException : Exception
             ETipoException.VeiculoComPlacaJaExiste => "Já existe um veiculo com a placa informada.",
             ETipoException.PlacaInvalida => "A placa informada é inválida.",
             ETipoException.VeiculoNaoEncontrado => "Veículo não encontrado.",
+            ETipoException.ManutencaoNaoEncontrada => "Manutenção não encontrada.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -53,5 +54,6 @@ public enum ETipoException
     TipoModeloIncompativel = 6,
     VeiculoComPlacaJaExiste = 7,
     PlacaInvalida = 8,
-    VeiculoNaoEncontrado = 9
+    VeiculoNaoEncontrado = 9,
+    ManutencaoNaoEncontrada = 10
 }
