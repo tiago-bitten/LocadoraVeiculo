@@ -83,4 +83,20 @@ public class ManutencoesController : ControllerVeiculoBase
         }
     }
     #endregion
+    
+    #region Cancelar
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Cancelar([FromBody] CancelarManutencaoDto dto)
+    {
+        try
+        {
+            await _aplicManutencao.CancelarAsync(dto);
+            return RespostaSemConteudo("Manutenção cancelada com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

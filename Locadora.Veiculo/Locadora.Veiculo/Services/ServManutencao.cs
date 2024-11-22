@@ -9,6 +9,7 @@ namespace Locadora.Veiculo.Services;
 public interface IServManutencao : IServBase<Manutencao>
 {
     void Concluir(Manutencao manutencao);
+    void Cancelar(Manutencao manutencao);
 }
 #endregion
 
@@ -38,13 +39,24 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
 
     #endregion
     
-    #region ConcluirAsync
+    #region Concluir
     public void Concluir(Manutencao manutencao)
     {
         manutencao.ValidarManutencaoConcluida();
         
         manutencao.Concluir();
         
+        Atualizar(manutencao);
+    }
+    #endregion
+    
+    #region Cancelar
+    public void Cancelar(Manutencao manutencao)
+    {
+        if (manutencao.Status is not (EStatusManutencao.EmAndamento or EStatusManutencao.Programada))
+            throw new VeiculoAppException(ETipoException.ManutencaoNaoPodeSerCancelada);
+        
+        manutencao.Cancelar();
         Atualizar(manutencao);
     }
     #endregion

@@ -15,6 +15,7 @@ public interface IAplicManutencao
     Task<ResultadoManutencaoDto> ObterPorIdAsync(string id);
     Task<(List<ResultadoManutencaoDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
     Task ConcluirAsync(string id);
+    Task CancelarAsync(CancelarManutencaoDto dto);
 }
 
 public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IAplicManutencao
@@ -33,7 +34,6 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
     #endregion
     
     #region AdicionarAsync
-
     public async Task<ResultadoManutencaoDto> AdicionarAsync(CriarManutencaoDto dto)
     {
         var manutencao = Mapper.Map<Manutencao>(dto);
@@ -108,14 +108,33 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
         manutencao.Concluir();
         
         await Uow.IniciarTransacaoAsync();
-        await Service.AtualizarAsync(manutencao);
+        Service.Atualizar(manutencao);
         
         var veiculo = await _servVeiculo.ObterPorIdAsync(manutencao.CodigoVeiculo);
         veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
         
-        veiculo.Disponivel();
+        veiculo.Disponibilizar();
         _servVeiculo.Atualizar(veiculo);
         
+        await Uow.PersistirTransacaoAsync();
+    }
+    #endregion
+    
+    #region CancelarAsync
+
+    public async Task CancelarAsync(CancelarManutencaoDto dto)
+    {
+        var manutencao = await Service.ObterPorIdAsync(dto.Id);
+        manutencao.ExcecaoSeNulo(ETipoException.ManutencaoNaoEncontrada);
+
+        var veiculo = await _servVeiculo.ObterPorIdAsync(manutencao.CodigoVeiculo);
+        veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
+        
+        await Uow.IniciarTransacaoAsync();
+        Service.Cancelar(manutencao);
+        
+        veiculo.Disponibilizar();
+        _servVeiculo.Atualizar(veiculo);
         await Uow.PersistirTransacaoAsync();
     }
     #endregion

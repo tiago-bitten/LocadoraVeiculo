@@ -25,3 +25,7 @@ public record ResultadoManutencaoDto(
     DateTime DataInicio,
     DateTime? DataFinal,
     EStatusManutencao Status); 
+    
+#region CancelarManutencaoDto
+public record CancelarManutencaoDto(string Id);
+#endregion
