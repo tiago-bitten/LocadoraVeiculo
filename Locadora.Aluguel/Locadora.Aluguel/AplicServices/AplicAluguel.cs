@@ -18,6 +18,7 @@ public interface IAplicAluguel
     Task<ResultadoVeiculoDto> ObterPorIdAsync(string id);
     Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
     Task ConcluirAsync(ConcluirAluguelDto dto);
+    Task CancelarAsync(CancelarAluguelDto dto);
 }
 #endregion
 
@@ -52,6 +53,11 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         
         aluguel.ValidarDatas();
 
+        if (dto.Programado)
+            aluguel.Programar();
+        else
+            aluguel.EmAndamento();
+        
         await Uow.IniciarTransacaoAsync();
         await Service.AdicionarAsync(aluguel);
         await Uow.PersistirTransacaoAsync();
@@ -103,6 +109,18 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
 
         await Uow.IniciarTransacaoAsync();
         Service.Concluir(aluguel);
+        await Uow.PersistirTransacaoAsync();
+    }
+    #endregion
+    
+    #region CancelarAsync
+    public async Task CancelarAsync(CancelarAluguelDto dto)
+    {
+        var aluguel = await Service.ObterPorIdAsync(dto.Id);
+        aluguel.ExcecaoSeNulo(ETipoException.AluguelNaoEncontrado);
+
+        await Uow.IniciarTransacaoAsync();
+        Service.Cancelar(aluguel);
         await Uow.PersistirTransacaoAsync();
     }
     #endregion

@@ -14,12 +14,14 @@ public class AluguelProfile : Profile
 }
 
 #region AdicionarAluguelDto
+
 public record AdicionarAluguelDto(
     string CodigoCliente,
     string CodigoVeiculo,
     decimal ValorDiaria,
     DateTime DataInicio,
-    DateTime DataFinal)
+    DateTime DataFinal,
+    bool Programado)
 {
     public int TotalDias => (DataFinal - DataInicio).Hours / 24;
     public decimal ValorTotal => ValorDiaria * TotalDias;
@@ -39,4 +41,8 @@ public record RespostaAluguelDto(
 
 #region ConcluirAluguelDto
 public record ConcluirAluguelDto(string Id);
+#endregion
+
+#region CancelarAluguelDto
+public record CancelarAluguelDto(string Id);
 #endregion

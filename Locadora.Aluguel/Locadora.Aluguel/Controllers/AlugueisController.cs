@@ -85,4 +85,21 @@ public class AlugueisController : ControllerAluguelBase
         }
     }
     #endregion
+    
+    #region Cancelar
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Cancelar([FromBody] CancelarAluguelDto dto)
+    {
+        try
+        {
+            await _aplicAluguel.CancelarAsync(dto);
+
+            return RespostaSemConteudo("Aluguel cancelado com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

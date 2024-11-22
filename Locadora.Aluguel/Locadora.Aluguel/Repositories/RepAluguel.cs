@@ -10,6 +10,8 @@ public interface IRepAluguel : IRepBase<Models.Aluguel>
 {
     Task<bool> ClienteEstaComAluguelEmAndamentoAsync(string codigoCliente);
     Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string codigoVeiculo);
+    Task<bool> VeiculoEstaComAluguelProgramadoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal);
+    Task<bool> ClienteEstaComAluguelProgramadoAsync(string codigoCliente, DateTime dataInicial, DateTime dataFinal);
 }
 #endregion
 
@@ -35,6 +37,30 @@ public class RepAluguel : RepBase<Models.Aluguel>, IRepAluguel
         return (from al in DbSet
             where al.CodigoVeiculo == codigoVeiculo
                   && al.Status == EStatusAluguel.EmAndamento
+            select 1).AnyAsync();
+    }
+    #endregion
+    
+    #region VeiculoEstaComAluguelProgramadoAsync
+    public Task<bool> VeiculoEstaComAluguelProgramadoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal)
+    {
+        return (from al in DbSet
+            where al.CodigoVeiculo == codigoVeiculo
+                  && al.Status == EStatusAluguel.Programdo
+                  && al.DataInicio <= dataFinal
+                  && al.DataFinal >= dataInicial
+            select 1).AnyAsync();
+    }
+    #endregion
+    
+    #region ClienteEstaComAluguelProgramadoAsync
+    public Task<bool> ClienteEstaComAluguelProgramadoAsync(string codigoCliente, DateTime dataInicial, DateTime dataFinal)
+    {
+        return (from al in DbSet
+            where al.CodigoCliente == codigoCliente
+                  && al.Status == EStatusAluguel.Programdo
+                  && al.DataInicio <= dataFinal
+                  && al.DataFinal >= dataInicial
             select 1).AnyAsync();
     }
     #endregion
