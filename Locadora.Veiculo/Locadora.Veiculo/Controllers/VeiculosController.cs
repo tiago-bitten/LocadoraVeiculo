@@ -116,4 +116,20 @@ public class VeiculosController : ControllerVeiculoBase
         }
     }
     #endregion
+    
+    #region DefinirStatus
+    [HttpPut("[action]")]
+    public async Task<IActionResult> DefinirStatus([FromBody] DefinirStatusDto dto)
+    {
+        try
+        {
+            await _aplicVeiculo.DefinirStatusAsync(dto);
+            return RespostaSemConteudo("Status do veículo definido com sucesso.");
+        }
+        catch (Exception e)
+        {
+            return RespostaErro(e.Message);
+        }
+    }
+    #endregion
 }

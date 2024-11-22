@@ -42,20 +42,20 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
         var veiculo = await _servVeiculo.ObterPorIdAsync(dto.CodigoVeiculo);
         veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
         
-        await Uow.IniciarTransacaoAsync();
-        if (dto.Programada)
+        if (dto.DataInicio.Date > DateTime.Now.Date)
         {
             manutencao.Programar();
+            veiculo.Reservar();
         }
         else
         {
             manutencao.EmAndamento();
-
-            veiculo.EmManutencao();
-            _servVeiculo.Atualizar(veiculo);
+            veiculo.Reservar();
         }
-
+        
+        await Uow.IniciarTransacaoAsync();
         await Service.AdicionarAsync(manutencao);
+        _servVeiculo.Atualizar(veiculo);
         await Uow.PersistirTransacaoAsync();
         
         var resultado = Mapper.Map<ResultadoManutencaoDto>(manutencao);
@@ -121,7 +121,6 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
     #endregion
     
     #region CancelarAsync
-
     public async Task CancelarAsync(CancelarManutencaoDto dto)
     {
         var manutencao = await Service.ObterPorIdAsync(dto.Id);

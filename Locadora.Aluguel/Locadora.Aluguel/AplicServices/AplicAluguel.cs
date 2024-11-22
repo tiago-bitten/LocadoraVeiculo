@@ -43,24 +43,31 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
     #region AdicionarAsync
     public async Task<RespostaAluguelDto> AdicionarAsync(AdicionarAluguelDto dto)
     {
+        var aluguel = Mapper.Map<Models.Aluguel>(dto);
+        aluguel.ValidarDatas();
+        
         var clienteDto = await _clienteHelper.ObterPorIdAsync(dto.CodigoCliente);
         var veiculoDto = await _veiculoHelper.ObterPorIdAsync(dto.CodigoVeiculo);
         
         clienteDto.ExcecaoSeNulo(ETipoException.ClienteNaoEncontrado);
         veiculoDto.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
         
-        var aluguel = Mapper.Map<Models.Aluguel>(dto);
-        
-        aluguel.ValidarDatas();
+        aluguel.ValorTotal = veiculoDto.ValorDiaria * dto.TotalDias;
 
-        if (dto.Programado)
+        if (dto.DataInicio.Date > DateTime.Now.Date)
+        {
             aluguel.Programar();
+        }
         else
+        {
             aluguel.EmAndamento();
+        }
         
         await Uow.IniciarTransacaoAsync();
         await Service.AdicionarAsync(aluguel);
         await Uow.PersistirTransacaoAsync();
+        
+        await _veiculoHelper.DefinirStatusAsync(veiculoDto.Id, "Alugado");
         
         var resposta = Mapper.Map<RespostaAluguelDto>(aluguel);
 
@@ -110,6 +117,8 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         await Uow.IniciarTransacaoAsync();
         Service.Concluir(aluguel);
         await Uow.PersistirTransacaoAsync();
+        
+        await _veiculoHelper.DefinirStatusAsync(aluguel.CodigoVeiculo, "Disponivel");
     }
     #endregion
     
@@ -122,6 +131,8 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         await Uow.IniciarTransacaoAsync();
         Service.Cancelar(aluguel);
         await Uow.PersistirTransacaoAsync();
+        
+        await _veiculoHelper.DefinirStatusAsync(aluguel.CodigoVeiculo, "Disponivel");
     }
     #endregion
 }

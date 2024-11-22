@@ -2,6 +2,7 @@
 using Locadora.Cliente.AplicServices.Infra;
 using Locadora.Veiculo.Dtos;
 using Locadora.Veiculo.Enterprise;
+using Locadora.Veiculo.Models;
 using Locadora.Veiculo.Repositories.Infra;
 using Locadora.Veiculo.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ public interface IAplicVeiculo
     Task<(List<ResultadoVeiculoDto> Listagem, int Total)> ObterParaAlugarAsync(QueryObterParaAlugar query);
     Task<VeiculoValidoDto> ValidarParaAlugarAsync(QueryValidarParaAlugar queryValidarParaAlugar);
     Task<ResultadoVeiculoDto> AtualizarAsync(AtualizarVeiculoDto dto);
+    Task DefinirStatusAsync(DefinirStatusDto dto);
 }
 #endregion
 
@@ -130,6 +132,39 @@ public class AplicVeiculo : AplicBase<Models.Veiculo, IServVeiculo>, IAplicVeicu
         var resultado = Mapper.Map<ResultadoVeiculoDto>(veiculo);
 
         return resultado;
+    }
+    #endregion
+    
+    #region DefinidirStatusAsync
+    public async Task DefinirStatusAsync(DefinirStatusDto dto)
+    {
+        var veiculo = await Service.ObterPorIdAsync(dto.CodigoVeiculo);
+        veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
+        
+        switch (dto.Status)
+        {
+            case "Disponivel":
+                veiculo.Disponibilizar();
+                break;
+            case "Alugado":
+                veiculo.Alugar();
+                break;
+            case "Manutencao":
+                veiculo.EmManutencao();
+                break;
+            case "Reservado":
+                veiculo.Reservar();
+                break;
+            case "Vendido":
+                veiculo.Vender();
+                break;  
+            default:
+                throw new VeiculoAppException(ETipoException.StatusVeiculoInvalido, "Status de veículo inválido.");
+        }
+        
+        await Uow.IniciarTransacaoAsync();
+        Service.Atualizar(veiculo);
+        await Uow.PersistirTransacaoAsync();
     }
     #endregion
 }

@@ -7,14 +7,16 @@ public interface IVeiculoHelper
 {
     Task<ResultadoVeiculoDto> ObterPorIdAsync(string codigoCliente);
     Task<VeiculoValidoDto> ValidarVeiculoAsync(QueryValidarParaAlugar query);
+    Task DefinirStatusAsync(string codigoVeiculo, string status);
 }
 #endregion
 
 public class VeiculoHelper : HttpClientBase, IVeiculoHelper
 {
-    private const string UrlBase = "https://localhost:60537/api";
+    private const string UrlBase = "http://localhost:5125/api";
     private const string ActionObterVeiculoPorId = "/Veiculos/{0}";
     private const string ActionValidarParaAlugar = "/Veiculos/ValidarParaAlugar?{0}";
+    private const string ActionDefinirStatus = "/Veiculos/DefinirStatus";
 
     public VeiculoHelper(HttpClient httpClient) : base(httpClient)
     {
@@ -49,6 +51,20 @@ public class VeiculoHelper : HttpClientBase, IVeiculoHelper
     }
     #endregion
 
+    #region DefinirStatusAsync
+    public async Task DefinirStatusAsync(string codigoVeiculo, string status)
+    {
+        var url = $"{UrlBase}{ActionDefinirStatus}";
+        var json = new { CodigoVeiculo = codigoVeiculo, Status = status };
+        var resposta = await PutAsync<dynamic>(url, json);
+
+        if (resposta.Sucesso)
+            return;
+
+        var mensagem = resposta?.Mensagem ?? "Sem resposta do serviço de veículo";
+        throw new AluguelAppException(ETipoException.ErroIntegracaoVeiculo, mensagem);
+    }
+    #endregion
 }
 
 #region Dtos

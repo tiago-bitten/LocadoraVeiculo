@@ -90,7 +90,7 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     #region Concluir
     public void Concluir(Models.Aluguel aluguel)
     {
-        if (aluguel.Status is not EStatusAluguel.EmAndamento)
+        if (aluguel.Status is not (EStatusAluguel.EmAndamento or EStatusAluguel.Programdo))
             throw new AluguelAppException(ETipoException.AluguelNaoPodeSerConcluido);
         
         aluguel.Concluir();

@@ -64,3 +64,7 @@ public record AtualizarVeiculoDto(
 #region VeiculoValidoDto
 public record VeiculoValidoDto(bool Valido, string Mensagem);
 #endregion
+
+#region DefinirStatusDto
+public record DefinirStatusDto(string CodigoVeiculo, string Status);
+#endregion
