@@ -50,7 +50,7 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
         else
         {
             manutencao.EmAndamento();
-            veiculo.Reservar();
+            veiculo.EmManutencao();
         }
         
         await Uow.IniciarTransacaoAsync();

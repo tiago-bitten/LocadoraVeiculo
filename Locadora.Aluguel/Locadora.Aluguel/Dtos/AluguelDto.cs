@@ -20,7 +20,7 @@ public record AdicionarAluguelDto(
     DateTime DataInicio,
     DateTime DataFinal)
 {
-    public int TotalDias => (DataFinal - DataInicio).Hours / 24;
+    public decimal TotalDias => (decimal)DataFinal.Subtract(DataInicio).TotalMinutes / 1440;
 }
 #endregion 
 
