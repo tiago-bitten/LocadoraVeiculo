@@ -9,14 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Veiculo.AplicServices;
 
+#region Interface
 public interface IAplicManutencao
 {
     Task<ResultadoManutencaoDto> AdicionarAsync(CriarManutencaoDto dto);
     Task<ResultadoManutencaoDto> ObterPorIdAsync(string id);
     Task<(List<ResultadoManutencaoDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
-    Task ConcluirAsync(string id);
+    Task ConcluirAsync(ConcluirManutencaoDto dto);
     Task CancelarAsync(CancelarManutencaoDto dto);
 }
+#endregion
 
 public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IAplicManutencao
 {
@@ -100,9 +102,9 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
     #endregion
     
     #region ConcluirAsync
-    public async Task ConcluirAsync(string id)
+    public async Task ConcluirAsync(ConcluirManutencaoDto dto)
     {
-        var manutencao = await Service.ObterPorIdAsync(id);
+        var manutencao = await Service.ObterPorIdAsync(dto.Id);
         manutencao.ExcecaoSeNulo(ETipoException.ManutencaoNaoEncontrada);
         
         manutencao.Concluir();

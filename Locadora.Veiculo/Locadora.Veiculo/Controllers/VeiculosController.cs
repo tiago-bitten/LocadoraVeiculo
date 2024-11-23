@@ -57,8 +57,8 @@ public class VeiculosController : ControllerVeiculoBase
     {
         try
         {
-            var resultado = await _aplicVeiculo.ObterTodosAsync(filtro);
-            return RespostaListagem(resultado.Listagem, resultado.Total, 
+            var (listagem, total) = await _aplicVeiculo.ObterTodosAsync(filtro);
+            return RespostaListagem(listagem, total, 
                 "Listagem de veiculos realizdada com sucesso.");
         }
         catch (Exception e)
@@ -74,8 +74,8 @@ public class VeiculosController : ControllerVeiculoBase
     {
         try
         {
-            var resultado = await _aplicVeiculo.ObterParaAlugarAsync(query);
-            return RespostaListagem(resultado.Listagem, resultado.Total,
+            var (listagem, total) = await _aplicVeiculo.ObterParaAlugarAsync(query);
+            return RespostaListagem(listagem, total,
                 "Listagem de veiculos disponível para aluguel realizada com sucesso.");
         }
         catch (Exception e)

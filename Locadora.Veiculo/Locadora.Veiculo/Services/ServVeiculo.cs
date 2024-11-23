@@ -35,6 +35,7 @@ public class ServVeiculo : ServBase<Models.Veiculo, IRepVeiculo>, IServVeiculo
             throw new VeiculoAppException(ETipoException.VeiculoComPlacaJaExiste);
 
         veiculo.ValidarCompatibilidadeTipoModelo();
+        veiculo.ValidarValorDiaria();
 
         await base.AdicionarAsync(veiculo);
     }

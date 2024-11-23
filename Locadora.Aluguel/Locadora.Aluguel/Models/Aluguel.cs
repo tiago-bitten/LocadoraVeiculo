@@ -25,7 +25,7 @@ public sealed class Aluguel : EntidadeBase
     #region ValidarValorTotal
     public void ValidarValorTotal()
     {
-        if (ValorTotal < 0)
+        if (ValorTotal <= 0)
             throw new AluguelAppException(ETipoException.ValorTotalAluguelInvalido);
     }
     #endregion

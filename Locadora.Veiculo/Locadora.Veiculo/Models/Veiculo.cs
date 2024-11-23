@@ -77,6 +77,14 @@ public class Veiculo : EntidadeBase
         }
     }
     #endregion
+
+    #region ValidarValorDiaria
+    public void ValidarValorDiaria()
+    {
+        if (ValorDiaria <= 0)
+            throw new VeiculoAppException(ETipoException.ValorDiariaInvalido);
+    }
+    #endregion
     
     #region Status
     public void Disponibilizar() => Status = EStatusVeiculo.Disponivel;
@@ -87,8 +95,8 @@ public class Veiculo : EntidadeBase
     #endregion
     #endregion
 }
-[JsonConverter(typeof(JsonStringEnumConverter))]
 #region Enums
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum EStatusVeiculo
 {
     Disponivel = 1,

@@ -58,9 +58,9 @@ public class AlugueisController : ControllerAluguelBase
     {
         try
         {
-            var resposta = await _aplicAluguel.ObterTodosAsync(queryFiltro);
+            var (listagem, total) = await _aplicAluguel.ObterTodosAsync(queryFiltro);
 
-            return RespostaListagem(resposta.Listagem, resposta.Total, "Alugueis obtidos com sucesso.");
+            return RespostaListagem(listagem, total, "Alugueis obtidos com sucesso.");
         }
         catch (Exception e)
         {

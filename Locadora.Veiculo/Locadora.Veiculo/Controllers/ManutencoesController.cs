@@ -57,9 +57,9 @@ public class ManutencoesController : ControllerVeiculoBase
     {
         try
         {
-            var resultado = await _aplicManutencao.ObterTodosAsync(filtro);
+            var (listagem, total) = await _aplicManutencao.ObterTodosAsync(filtro);
 
-            return RespostaListagem(resultado.Listagem, resultado.Total);
+            return RespostaListagem(listagem, total);
         }
         catch (Exception e)
         {
@@ -69,12 +69,12 @@ public class ManutencoesController : ControllerVeiculoBase
     #endregion
     
     #region Concluir
-    [HttpPut("[action]/{id}")]
-    public async Task<IActionResult> Concluir(string id)
+    [HttpPut("[action]")]
+    public async Task<IActionResult> Concluir([FromBody] ConcluirManutencaoDto dto)
     {
         try
         {
-            await _aplicManutencao.ConcluirAsync(id);
+            await _aplicManutencao.ConcluirAsync(dto);
             return RespostaSemConteudo("Veículo concluído com sucesso.");
         }
         catch (Exception e)

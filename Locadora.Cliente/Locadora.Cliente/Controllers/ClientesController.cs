@@ -59,8 +59,8 @@ public class ClientesController : ControllerClienteBase
     {
         try
         {
-            var resultado = await _aplicCliente.ObterTodosAsync(filtro);
-            return RespostaListagem(resultado.Listagem, resultado.Total);
+            var (listagem, total) = await _aplicCliente.ObterTodosAsync(filtro);
+            return RespostaListagem(listagem, total);
         }
         catch (Exception e)
         {
