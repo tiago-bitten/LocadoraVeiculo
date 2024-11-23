@@ -7,8 +7,6 @@ public class AluguelConfig : EntidadeBaseConfig<Models.Aluguel>
 {
     public override void Configure(EntityTypeBuilder<Models.Aluguel> builder)
     {
-        builder.ToTable("alugueis");
-        
         builder.Property(x => x.DataInicio)
             .HasColumnName("data_inicio");
         
