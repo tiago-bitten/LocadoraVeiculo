@@ -29,3 +29,7 @@ public record ResultadoManutencaoDto(
 #region CancelarManutencaoDto
 public record CancelarManutencaoDto(string Id);
 #endregion
+
+#region ConcluirManutencaoDto
+public record ConcluirManutencaoDto(string Id);
+#endregion

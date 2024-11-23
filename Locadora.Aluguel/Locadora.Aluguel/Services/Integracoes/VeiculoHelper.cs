@@ -13,7 +13,8 @@ public interface IVeiculoHelper
 
 public class VeiculoHelper : HttpClientBase, IVeiculoHelper
 {
-    private const string UrlBase = "http://localhost:5125/api";
+    #region Ctor
+    private const string UrlBase = "https://localhost:60537/api";
     private const string ActionObterVeiculoPorId = "/Veiculos/{0}";
     private const string ActionValidarParaAlugar = "/Veiculos/ValidarParaAlugar?{0}";
     private const string ActionDefinirStatus = "/Veiculos/DefinirStatus";
@@ -21,6 +22,7 @@ public class VeiculoHelper : HttpClientBase, IVeiculoHelper
     public VeiculoHelper(HttpClient httpClient) : base(httpClient)
     {
     }
+    #endregion
 
     #region ObterPorIdAsync
     public async Task<ResultadoVeiculoDto> ObterPorIdAsync(string codigoVeiculo)

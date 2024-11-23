@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Locadora.Aluguel.Repositories.Configs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Aluguel.Repositories.Context;
 
@@ -12,20 +13,8 @@ public class AluguelDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new AluguelConfig());
+        
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Models.Aluguel>(entity =>
-        {
-            entity.HasKey(x => x.Id);
-
-            entity.Property(x => x.Status)
-                .HasConversion<string>();
-
-            entity.HasIndex(x => x.CodigoCliente);
-            entity.HasIndex(x => x.CodigoVeiculo);
-            
-            entity.Property(x => x.Id)
-                .HasDefaultValueSql("'aluguel_' || abs(random() % 89999999 + 10000000)");
-        });
     }
 }

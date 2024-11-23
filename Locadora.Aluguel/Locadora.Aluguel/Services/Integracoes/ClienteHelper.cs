@@ -14,7 +14,7 @@ public interface IClienteHelper
 public class ClienteHelper : HttpClientBase, IClienteHelper
 {
     #region Ctor
-    private const string UrlBase = "http://localhost:5009/api";
+    private const string UrlBase = "https://localhost:60535/api";
     private const string ActionObterClientePorId = "/Clientes/{0}";
     private const string ActionObterTodos = "/Clientes";
     private const string ActionValidarParaAlugar = "/Clientes/ValidarParaAlugar/{0}";

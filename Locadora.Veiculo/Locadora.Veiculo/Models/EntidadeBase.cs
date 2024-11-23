@@ -1,6 +1,6 @@
 ﻿namespace Locadora.Veiculo.Models;
 
-public class EntidadeBase : Identificador
+public abstract class EntidadeBase : Identificador
 {
     public DateTime DataCriacao { get; private set; } = DateTime.Now;
     public DateTime DataAlteracao { get; private set; } = DateTime.Now;

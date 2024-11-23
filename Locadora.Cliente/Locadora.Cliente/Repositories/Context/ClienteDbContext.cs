@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Locadora.Cliente.Repositories.Configs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Cliente.Repositories.Context;
 
@@ -12,14 +13,8 @@ public class ClienteDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new ClienteConfig());
+        
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Models.Cliente>(entity =>
-        {
-            entity.HasKey(x => x.Id);
-            
-            entity.Property(x => x.Id)
-                .HasDefaultValueSql("'cliente_' || abs(random() % 89999999 + 10000000)");
-        });
     }
 }

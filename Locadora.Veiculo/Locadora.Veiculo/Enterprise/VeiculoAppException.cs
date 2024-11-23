@@ -42,6 +42,7 @@ public class VeiculoAppException : Exception
             ETipoException.VeiculoJaPossuiManutencaoProgramada => "Veículo já possui manutenção programada.",
             ETipoException.ManutencaoNaoPodeSerCancelada => "A manutenção não pode ser cancelada.",
             ETipoException.StatusVeiculoInvalido => "Status do veículo inválido.",
+            ETipoException.ValorDiariaInvalido => "O valor da diária informado deve ser maior que zero.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -61,5 +62,6 @@ public enum ETipoException
     ManutencaoNaoEncontrada = 10,
     VeiculoJaPossuiManutencaoProgramada = 11,
     ManutencaoNaoPodeSerCancelada = 12,
-    StatusVeiculoInvalido = 13
+    StatusVeiculoInvalido = 13,
+    ValorDiariaInvalido = 14
 }
