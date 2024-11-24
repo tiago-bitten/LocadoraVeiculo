@@ -41,6 +41,7 @@ public class AluguelAppException : Exception
             ETipoException.ClienteEstaComAluguelProgramado => "O cliente está com um aluguel programado.",
             ETipoException.VeiculoEstaComAluguelProgramado => "O veículo está com um aluguel programado.",
             ETipoException.AluguelNaoPodeSerCancelado => "Apenas alugueis em andamento ou programados podem ser cancelados.",
+            ETipoException.AluguelNaoPodeSerIniciado => "Apenas alugueis programados podem ser iniciados.",
             _ => "Ocorreu um erro na aplicação de veículos."
         };
     }
@@ -62,5 +63,6 @@ public enum ETipoException
     AluguelNaoPodeSerConcluido = 12,
     ClienteEstaComAluguelProgramado = 13,
     VeiculoEstaComAluguelProgramado = 14,
-    AluguelNaoPodeSerCancelado = 15
+    AluguelNaoPodeSerCancelado = 15,
+    AluguelNaoPodeSerIniciado = 16
 }

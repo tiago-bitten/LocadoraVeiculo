@@ -3,6 +3,7 @@ using System;
 using Locadora.Veiculo.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Locadora.Veiculo.Migrations
 {
     [DbContext(typeof(VeiculoDbContext))]
-    partial class VeiculoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241123203953_Config")]
+    partial class Config
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");

@@ -4,7 +4,7 @@ namespace Locadora.Aluguel.Extensions;
 
 public static class ExcecaoExtensions
 {
-    public static void ExcecaoSeNulo<T>(this T obj, ETipoException tipo, string? mensagem = null) where T : class
+    public static void ExcecaoSeNulo<T>(this T obj, ETipoException tipo, string? mensagem = null)
     {
         switch (obj)
         {

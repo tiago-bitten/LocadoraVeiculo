@@ -8,8 +8,8 @@ public class ManutencaoConfig : EntidadeBaseConfig<Models.Manutencao>
 {
     public override void Configure(EntityTypeBuilder<Manutencao> builder)
     {
-        builder.ToTable("manutencoes");
-
+        builder.ToTable("Manutencao");
+        
         builder.Property(x => x.Tipo)
             .HasColumnName("tipo")
             .HasConversion<string>();

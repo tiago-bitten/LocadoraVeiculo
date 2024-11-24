@@ -10,6 +10,7 @@ public interface IServManutencao : IServBase<Manutencao>
 {
     void Concluir(Manutencao manutencao);
     void Cancelar(Manutencao manutencao);
+    void IniciarProgramada(Manutencao manutencao);
 }
 #endregion
 
@@ -22,7 +23,6 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
     #endregion
     
     #region AdicionarAsync
-
     public override async Task AdicionarAsync(Manutencao manutencao)
     {
         if (manutencao.Status == EStatusManutencao.Programada)
@@ -60,4 +60,21 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
         Atualizar(manutencao);
     }
     #endregion
+    
+    #region IniciarProgramada
+    public void IniciarProgramada(Manutencao manutencao)
+    {
+        if (manutencao.Status is not EStatusManutencao.Programada)
+            throw new VeiculoAppException(ETipoException.ManutencaoNaoPodeSerIniciada);
+
+        manutencao.EmAndamento();
+        manutencao.DataInicio = DateTime.Now;
+        if (manutencao.DataFinal.HasValue)
+        {
+            var subtrairDias = (int)manutencao.DataInicio.Subtract(DateTime.Now).TotalDays;
+            manutencao.DataFinal = manutencao.DataFinal.Value.AddDays(subtrairDias);
+        }
+        Atualizar(manutencao);
+    }
+    #endregion    
 }

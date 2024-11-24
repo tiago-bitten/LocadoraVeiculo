@@ -7,8 +7,6 @@ public class ClienteConfig : EntidadeBaseConfig<Models.Cliente>
 {
     public override void Configure(EntityTypeBuilder<Models.Cliente> builder)
     {
-        builder.ToTable("clientes");
-
         builder.Property(x => x.Nome)
             .HasColumnName("nome");
 

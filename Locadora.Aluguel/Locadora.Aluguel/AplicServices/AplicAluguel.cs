@@ -19,6 +19,7 @@ public interface IAplicAluguel
     Task<(List<RespostaAluguelDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
     Task ConcluirAsync(ConcluirAluguelDto dto);
     Task CancelarAsync(CancelarAluguelDto dto);
+    Task IniciarProgramadoAsync(IniciarAluguelProgramadoDto dto);
 }
 #endregion
 
@@ -133,6 +134,18 @@ public class AplicAluguel : AplicBase<Models.Aluguel, IServAluguel>, IAplicAlugu
         await Uow.PersistirTransacaoAsync();
         
         await _veiculoHelper.DefinirStatusAsync(aluguel.CodigoVeiculo, "Disponivel");
+    }
+    #endregion
+    
+    #region IniciarAluguelProgramadoAsync
+    public async Task IniciarProgramadoAsync(IniciarAluguelProgramadoDto dto)
+    {
+        var aluguel = await Service.ObterPorIdAsync(dto.CodigoAluguel);
+        aluguel.ExcecaoSeNulo(ETipoException.AluguelNaoEncontrado);
+        
+        await Uow.IniciarTransacaoAsync();
+        Service.IniciarProgramado(aluguel);
+        await Uow.PersistirTransacaoAsync();
     }
     #endregion
 }

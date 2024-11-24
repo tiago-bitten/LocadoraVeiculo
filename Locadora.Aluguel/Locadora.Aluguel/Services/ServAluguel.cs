@@ -14,6 +14,7 @@ public interface IServAluguel : IServBase<Models.Aluguel>
     Task ValidarDisponibilidadeVeiculoAsync(Models.Aluguel aluguel);
     void Concluir(Models.Aluguel aluguel);
     void Cancelar(Models.Aluguel aluguel);
+    void IniciarProgramado(Models.Aluguel aluguel);
 }
 #endregion
 
@@ -105,6 +106,22 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
             throw new AluguelAppException(ETipoException.AluguelNaoPodeSerCancelado);
         
         aluguel.Cancelar();
+        Atualizar(aluguel);
+    }
+    #endregion
+    
+    #region IniciarProgramado
+    public void IniciarProgramado(Models.Aluguel aluguel)
+    {
+        if (aluguel.Status is not EStatusAluguel.Programdo)
+            throw new AluguelAppException(ETipoException.AluguelNaoPodeSerIniciado);
+        
+        aluguel.EmAndamento();
+        
+        var subtrairDias = (int)aluguel.DataInicio.Subtract(DateTime.Now).TotalDays;
+        
+        aluguel.DataInicio = DateTime.Now;
+        aluguel.DataFinal = aluguel.DataFinal.AddDays(-subtrairDias);
         Atualizar(aluguel);
     }
     #endregion

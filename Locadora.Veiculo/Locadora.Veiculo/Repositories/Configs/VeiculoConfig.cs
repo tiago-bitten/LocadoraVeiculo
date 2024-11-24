@@ -7,7 +7,7 @@ public class VeiculoConfig : EntidadeBaseConfig<Models.Veiculo>
 {
     public override void Configure(EntityTypeBuilder<Models.Veiculo> builder)
     {
-        builder.ToTable("veiculos");
+        builder.ToTable("Veiculo");
         
         builder.Property(x => x.Modelo)
             .HasColumnName("modelo")
