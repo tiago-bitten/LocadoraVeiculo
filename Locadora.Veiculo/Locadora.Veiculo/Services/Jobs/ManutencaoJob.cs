@@ -34,12 +34,26 @@ public class ManutencaoJob : IManutencaoJob
     {
         var manutencoes = await _repManutencao.ObterManutencoesProgramadas()
             .Where(x => x.DataInicio.Date == DateTime.Today)
-            .Select(x => new IniciarManutencaoProgramadaDto(x.Id))
+            .Select(x => new
+            {
+                x.Id,
+                x.DataInicio
+            })
             .ToListAsync();
 
         foreach (var manutencao in manutencoes)
         {
-            BackgroundJob.Enqueue<IManutencaoJob>(x => x.IniciarManutencaoProgramadaAsync(manutencao));
+            var dto = new IniciarManutencaoProgramadaDto(manutencao.Id);
+            var delay = manutencao.DataInicio - DateTime.Now;
+            
+            if (delay > TimeSpan.Zero)
+            {
+                BackgroundJob.Schedule<IManutencaoJob>(x => x.IniciarManutencaoProgramadaAsync(dto), delay);
+            }
+            else
+            {
+                BackgroundJob.Enqueue<IManutencaoJob>(x => x.IniciarManutencaoProgramadaAsync(dto));
+            }
         }
     }
 
