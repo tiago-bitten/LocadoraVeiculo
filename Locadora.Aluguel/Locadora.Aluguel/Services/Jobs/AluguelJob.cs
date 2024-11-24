@@ -34,12 +34,26 @@ public class AluguelJob : IAluguelJob
     {
         var alugueisProgramados = await _repAluguel.ObterAlugueisProgramados()
             .Where(x => x.DataInicio.Date == DateTime.Now.Date)
-            .Select(x => new IniciarAluguelProgramadoDto(x.Id))
+            .Select(x => new
+            {
+                x.Id,
+                x.DataInicio
+            })
             .ToListAsync();
 
         foreach (var aluguel in alugueisProgramados)
         {
-            BackgroundJob.Enqueue<IAluguelJob>(x => x.IniciarAluguelProgramadoAsync(aluguel));
+            var dto = new IniciarAluguelProgramadoDto(aluguel.Id);
+            var delay = aluguel.DataInicio - DateTime.Now;
+
+            if (delay > TimeSpan.Zero)
+            {
+                BackgroundJob.Schedule<IAluguelJob>(x => x.IniciarAluguelProgramadoAsync(dto), delay);
+            }
+            else
+            {
+                BackgroundJob.Enqueue<IAluguelJob>(x => x.IniciarAluguelProgramadoAsync(dto));
+            }
         }
     }
 
