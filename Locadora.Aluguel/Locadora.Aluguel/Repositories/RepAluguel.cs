@@ -12,6 +12,7 @@ public interface IRepAluguel : IRepBase<Models.Aluguel>
     Task<bool> VeiculoEstaComAluguelEmAndamentoAsync(string codigoVeiculo);
     Task<bool> VeiculoEstaComAluguelProgramadoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal);
     Task<bool> ClienteEstaComAluguelProgramadoAsync(string codigoCliente, DateTime dataInicial, DateTime dataFinal);
+    IQueryable<Models.Aluguel> ObterAlugueisProgramados();
 }
 #endregion
 
@@ -62,6 +63,13 @@ public class RepAluguel : RepBase<Models.Aluguel>, IRepAluguel
                   && al.DataInicio <= dataFinal
                   && al.DataFinal >= dataInicial
             select 1).AnyAsync();
+    }
+    #endregion
+    
+    #region ObterAlugueisProgramados
+    public IQueryable<Models.Aluguel> ObterAlugueisProgramados()
+    {
+        return DbSet.Where(a => a.Status == EStatusAluguel.Programdo);
     }
     #endregion
 }

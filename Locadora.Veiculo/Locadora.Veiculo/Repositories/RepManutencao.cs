@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 namespace Locadora.Veiculo.Repositories;
 
 #region Interfaces
-
 public interface IRepManutencao : IRepBase<Manutencao>
 {
     IQueryable<Manutencao> ObterPorVeiculo(string codigoVeiculo);
     Task<bool> PossuiManutencaoProgramadaPorVeiculoAsync(string codigoVeiculo, DateTime dataInicial, DateTime? dataFinal);
+    IQueryable<Manutencao> ObterManutencoesProgramadas();
 }
 #endregion
 
@@ -38,6 +38,13 @@ public class RepManutencao : RepBase<Manutencao>, IRepManutencao
                   && ma.Status == EStatusManutencao.Programada
                     && ma.DataInicio <= dataFinal && ma.DataFinal >= dataInicial
             select 1).AnyAsync();
+    }
+    #endregion
+    
+    #region ObterManutencoesProgramadas
+    public IQueryable<Manutencao> ObterManutencoesProgramadas()
+    {
+        return DbSet.Where(m => m.Status == EStatusManutencao.Programada);
     }
     #endregion
 }

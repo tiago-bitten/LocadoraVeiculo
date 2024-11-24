@@ -1,4 +1,6 @@
+using Hangfire;
 using Locadora.Veiculo.Enterprise;
+using Locadora.Veiculo.Services.Jobs;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +15,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
-
 builder.Services.ConfigureDatabase(connectionString);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureAutoMapper();
+builder.Services.ConfigureHangfire();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -53,6 +55,10 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.UseHangfireDashboard();
+
+JobsConfig.Criar();
 
 app.UseHttpsRedirection();
 

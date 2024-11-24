@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.Storage.SQLite;
 using Locadora.Aluguel.AplicServices;
 using Locadora.Aluguel.Dtos;
 using Locadora.Aluguel.Repositories;
@@ -5,6 +7,7 @@ using Locadora.Aluguel.Repositories.Context;
 using Locadora.Aluguel.Repositories.Infra;
 using Locadora.Aluguel.Services;
 using Locadora.Aluguel.Services.Integracoes;
+using Locadora.Aluguel.Services.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -31,7 +34,20 @@ builder.Services.AddScoped<IAplicAluguel, AplicAluguel>();
 builder.Services.AddScoped<IServAluguel, ServAluguel>();
 builder.Services.AddHttpClient<IClienteHelper, ClienteHelper>();
 builder.Services.AddHttpClient<IVeiculoHelper, VeiculoHelper>();
+builder.Services.AddScoped<IAluguelJob, AluguelJob>();
 builder.Services.AddAutoMapper(typeof(AluguelProfile));
+
+builder.Services.AddHangfire(configuration => configuration
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSQLiteStorage()
+);
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = 5;
+    options.Queues = ["alugueis", "default"];
+});
 
 #region Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -70,6 +86,10 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.UseHangfireDashboard();
+
+JobsConfig.Criar();
 
 app.UseHttpsRedirection();
 

@@ -13,7 +13,6 @@ public class AluguelProfile : Profile
 }
 
 #region AdicionarAluguelDto
-
 public record AdicionarAluguelDto(
     string CodigoCliente,
     string CodigoVeiculo,
@@ -41,4 +40,8 @@ public record ConcluirAluguelDto(string Id);
 
 #region CancelarAluguelDto
 public record CancelarAluguelDto(string Id);
+#endregion
+
+#region IniciarAluguelProgramadoDto
+public record IniciarAluguelProgramadoDto(string CodigoAluguel);
 #endregion

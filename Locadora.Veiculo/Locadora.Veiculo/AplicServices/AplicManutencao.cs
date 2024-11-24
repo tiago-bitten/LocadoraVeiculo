@@ -17,6 +17,7 @@ public interface IAplicManutencao
     Task<(List<ResultadoManutencaoDto> Listagem, int Total)> ObterTodosAsync(QueryFiltro filtro);
     Task ConcluirAsync(ConcluirManutencaoDto dto);
     Task CancelarAsync(CancelarManutencaoDto dto);
+    Task IniciaroProgramadaAsync(IniciarManutencaoProgramadaDto dto);
 }
 #endregion
 
@@ -136,6 +137,26 @@ public class AplicManutencao : AplicBase<Models.Manutencao, IServManutencao>, IA
         
         veiculo.Disponibilizar();
         _servVeiculo.Atualizar(veiculo);
+        await Uow.PersistirTransacaoAsync();
+    }
+    #endregion
+    
+    #region IniciarProgramadaAsync
+    public async Task IniciaroProgramadaAsync(IniciarManutencaoProgramadaDto dto)
+    {
+        var manutencao = await Service.ObterPorIdAsync(dto.CodigoManutencao);
+        manutencao.ExcecaoSeNulo(ETipoException.ManutencaoNaoEncontrada);
+
+        var veiculo = await _servVeiculo.ObterPorIdAsync(manutencao.CodigoVeiculo); 
+        veiculo.ExcecaoSeNulo(ETipoException.VeiculoNaoEncontrado);
+        
+        await Uow.IniciarTransacaoAsync();
+        
+        Service.IniciarProgramada(manutencao);
+        
+        veiculo.EmManutencao();        
+        _servVeiculo.Atualizar(veiculo);
+        
         await Uow.PersistirTransacaoAsync();
     }
     #endregion
