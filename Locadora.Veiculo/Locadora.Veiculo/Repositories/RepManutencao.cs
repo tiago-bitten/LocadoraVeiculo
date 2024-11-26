@@ -35,7 +35,7 @@ public class RepManutencao : RepBase<Manutencao>, IRepManutencao
     {
         return (from ma in DbSet
             where ma.CodigoVeiculo == codigoVeiculo
-                  && ma.Status == EStatusManutencao.Programada
+                  && ma.Status == EStatusManutencao.Programado
                     && ma.DataInicio <= dataFinal && ma.DataFinal >= dataInicial
             select 1).AnyAsync();
     }
@@ -44,7 +44,7 @@ public class RepManutencao : RepBase<Manutencao>, IRepManutencao
     #region ObterManutencoesProgramadas
     public IQueryable<Manutencao> ObterManutencoesProgramadas()
     {
-        return DbSet.Where(m => m.Status == EStatusManutencao.Programada);
+        return DbSet.Where(m => m.Status == EStatusManutencao.Programado);
     }
     #endregion
 }

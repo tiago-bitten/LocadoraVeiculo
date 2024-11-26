@@ -26,15 +26,15 @@ public sealed class Manutencao : EntidadeBase
 
     public void ValidarManutencaoConcluida()
     {
-        if (Status == EStatusManutencao.Concluida && !DataFinal.HasValue)
+        if (Status == EStatusManutencao.Concluido && !DataFinal.HasValue)
             throw new VeiculoAppException(ETipoException.ManutencaoConcluidaSemDataFinal);
     }
 
     #region Status
-    public void Programar() => Status = EStatusManutencao.Programada;
+    public void Programar() => Status = EStatusManutencao.Programado;
     public void EmAndamento() => Status = EStatusManutencao.EmAndamento;
-    public void Concluir() => Status = EStatusManutencao.Concluida;
-    public void Cancelar() => Status = EStatusManutencao.Cancelada;
+    public void Concluir() => Status = EStatusManutencao.Concluido;
+    public void Cancelar() => Status = EStatusManutencao.Cancelado;
     #endregion
     #endregion
 }
@@ -48,10 +48,10 @@ public enum ETipoManutencao
 
 public enum EStatusManutencao
 {
-    Programada = 1,
+    Programado = 1,
     Pendente = 2,
     EmAndamento = 3,
-    Concluida = 5,
-    Cancelada = 6
+    Concluido = 5,
+    Cancelado = 6
 }
 #endregion

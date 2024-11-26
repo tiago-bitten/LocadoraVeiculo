@@ -25,7 +25,7 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
     #region AdicionarAsync
     public override async Task AdicionarAsync(Manutencao manutencao)
     {
-        if (manutencao.Status == EStatusManutencao.Programada)
+        if (manutencao.Status == EStatusManutencao.Programado)
         {
             var possuiManutencaoProgramada = await Repository.PossuiManutencaoProgramadaPorVeiculoAsync(manutencao.CodigoVeiculo,
                 manutencao.DataInicio, manutencao.DataFinal);
@@ -53,7 +53,7 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
     #region Cancelar
     public void Cancelar(Manutencao manutencao)
     {
-        if (manutencao.Status is not (EStatusManutencao.EmAndamento or EStatusManutencao.Programada))
+        if (manutencao.Status is not (EStatusManutencao.EmAndamento or EStatusManutencao.Programado))
             throw new VeiculoAppException(ETipoException.ManutencaoNaoPodeSerCancelada);
         
         manutencao.Cancelar();
@@ -64,7 +64,7 @@ public class ServManutencao : ServBase<Manutencao, IRepManutencao>, IServManuten
     #region IniciarProgramada
     public void IniciarProgramada(Manutencao manutencao)
     {
-        if (manutencao.Status is not EStatusManutencao.Programada)
+        if (manutencao.Status is not EStatusManutencao.Programado)
             throw new VeiculoAppException(ETipoException.ManutencaoNaoPodeSerIniciada);
 
         manutencao.EmAndamento();

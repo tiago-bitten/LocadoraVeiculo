@@ -31,7 +31,7 @@ public sealed class Aluguel : EntidadeBase
     #endregion
     
     #region Status
-    public void Programar() => Status = EStatusAluguel.Programdo;
+    public void Programar() => Status = EStatusAluguel.Programado;
     public void EmAndamento() => Status = EStatusAluguel.EmAndamento;
     public void Concluir() => Status = EStatusAluguel.Concluido;
     public void Cancelar() => Status = EStatusAluguel.Cancelado;
@@ -42,7 +42,7 @@ public sealed class Aluguel : EntidadeBase
 #region Enums
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum EStatusAluguel {
-    Programdo = 1,
+    Programado = 1,
     EmAndamento = 2,
     Concluido = 3,
     Cancelado = 4
