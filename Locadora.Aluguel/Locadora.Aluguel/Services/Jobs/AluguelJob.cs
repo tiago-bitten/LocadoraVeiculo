@@ -33,7 +33,7 @@ public class AluguelJob : IAluguelJob
     public async Task IniciarAlugueisProgramadosAsync()
     {
         var alugueisProgramados = await _repAluguel.ObterAlugueisProgramados()
-            .Where(x => x.DataInicio.Date == DateTime.Now.Date)
+            .Where(x => x.DataInicio.Date <= DateTime.Now.Date)
             .Select(x => new
             {
                 x.Id,

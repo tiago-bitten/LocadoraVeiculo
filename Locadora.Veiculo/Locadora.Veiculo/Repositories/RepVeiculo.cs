@@ -36,7 +36,7 @@ public class RepVeiculo : RepBase<Models.Veiculo>, IRepVeiculo
             where ve.Status == EStatusVeiculo.Disponivel
                   && (ma == null 
                       || (ma.Status != EStatusManutencao.EmAndamento 
-                          && !(ma.Status == EStatusManutencao.Programada && ma.DataInicio <= dataFinal && ma.DataFinal >= dataInicial))
+                          && !(ma.Status == EStatusManutencao.Programado && ma.DataInicio <= dataFinal && ma.DataFinal >= dataInicial))
                   )
             select ve;
 

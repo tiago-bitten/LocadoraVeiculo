@@ -33,7 +33,7 @@ public class ManutencaoJob : IManutencaoJob
     public async Task IniciarManutencoesProgramadasAsync()
     {
         var manutencoes = await _repManutencao.ObterManutencoesProgramadas()
-            .Where(x => x.DataInicio.Date == DateTime.Today)
+            .Where(x => x.DataInicio.Date <= DateTime.Today)
             .Select(x => new
             {
                 x.Id,
@@ -52,6 +52,7 @@ public class ManutencaoJob : IManutencaoJob
             }
             else
             {
+                Console.WriteLine($"Enfileirando manutenção {manutencao.Id}");
                 BackgroundJob.Enqueue<IManutencaoJob>(x => x.IniciarManutencaoProgramadaAsync(dto));
             }
         }
