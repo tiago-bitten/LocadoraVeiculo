@@ -91,7 +91,7 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     #region Concluir
     public void Concluir(Models.Aluguel aluguel)
     {
-        if (aluguel.Status is not (EStatusAluguel.EmAndamento or EStatusAluguel.Programdo))
+        if (aluguel.Status is not (EStatusAluguel.EmAndamento or EStatusAluguel.Programado))
             throw new AluguelAppException(ETipoException.AluguelNaoPodeSerConcluido);
         
         aluguel.Concluir();
@@ -102,7 +102,7 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     #region Cancelar
     public void Cancelar(Models.Aluguel aluguel)
     {
-        if (aluguel.Status is not (EStatusAluguel.Programdo or EStatusAluguel.EmAndamento))
+        if (aluguel.Status is not (EStatusAluguel.Programado or EStatusAluguel.EmAndamento))
             throw new AluguelAppException(ETipoException.AluguelNaoPodeSerCancelado);
         
         aluguel.Cancelar();
@@ -113,7 +113,7 @@ public class ServAluguel : ServBase<Models.Aluguel, IRepAluguel>, IServAluguel
     #region IniciarProgramado
     public void IniciarProgramado(Models.Aluguel aluguel)
     {
-        if (aluguel.Status is not EStatusAluguel.Programdo)
+        if (aluguel.Status is not EStatusAluguel.Programado)
             throw new AluguelAppException(ETipoException.AluguelNaoPodeSerIniciado);
         
         aluguel.EmAndamento();
