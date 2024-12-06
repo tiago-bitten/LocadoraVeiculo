@@ -46,11 +46,11 @@ public class RepAluguel : RepBase<Models.Aluguel>, IRepAluguel
     public Task<bool> VeiculoEstaComAluguelProgramadoAsync(string codigoVeiculo, DateTime dataInicial, DateTime dataFinal)
     {
         return (from al in DbSet
-            where al.CodigoVeiculo == codigoVeiculo
-                  && al.Status == EStatusAluguel.Programdo
+               where al.CodigoVeiculo == codigoVeiculo
+                  && al.Status == EStatusAluguel.Programado
                   && al.DataInicio <= dataFinal
                   && al.DataFinal >= dataInicial
-            select 1).AnyAsync();
+              select 1).AnyAsync();
     }
     #endregion
     
@@ -58,18 +58,18 @@ public class RepAluguel : RepBase<Models.Aluguel>, IRepAluguel
     public Task<bool> ClienteEstaComAluguelProgramadoAsync(string codigoCliente, DateTime dataInicial, DateTime dataFinal)
     {
         return (from al in DbSet
-            where al.CodigoCliente == codigoCliente
-                  && al.Status == EStatusAluguel.Programdo
+               where al.CodigoCliente == codigoCliente
+                  && al.Status == EStatusAluguel.Programado
                   && al.DataInicio <= dataFinal
                   && al.DataFinal >= dataInicial
-            select 1).AnyAsync();
+               select 1).AnyAsync();
     }
     #endregion
     
     #region ObterAlugueisProgramados
     public IQueryable<Models.Aluguel> ObterAlugueisProgramados()
     {
-        return DbSet.Where(a => a.Status == EStatusAluguel.Programdo);
+        return DbSet.Where(a => a.Status == EStatusAluguel.Programado);
     }
     #endregion
 }
