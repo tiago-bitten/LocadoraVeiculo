@@ -78,4 +78,6 @@ O sistema será composto por três microsserviços independentes:
    - O aluguel é registrado.
    - Uma requisição é enviada ao microsserviço de Veículos para alterar o status do veículo para "Alugado".
 
-### Estrutura de Diretórios
+### Como executar
+
+- Execute o arquivo start.bat localizado no diretório raiz das aplicações
